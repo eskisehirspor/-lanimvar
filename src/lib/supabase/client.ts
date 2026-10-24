@@ -1,0 +1,26 @@
+import 'react-native-url-polyfill/auto';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { AppState, Platform } from 'react-native';
+
+import { isSupabaseConfigured, supabaseConfig } from './config';
+
+let client: SupabaseClient | null = null;
+
+/** Lazily created; null until EXPO_PUBLIC_SUPABASE_* is set. Product writes go through server RPCs. */
+export function getSupabase(): SupabaseClient | null {
+  if (!isSupabaseConfigured) return null;
+  if (client) return client;
+  client = createClient(supabaseConfig.url, supabaseConfig.anonKey, {
+    auth: {
+      storage: Platform.OS === 'web' ? undefined : AsyncStorage,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
+  });
+  const auth = client.auth;
+  AppState.addEventListener('change', (state) => (state === 'active' ? auth.startAutoRefresh() : auth.stopAutoRefresh()));
+  return client;
+}

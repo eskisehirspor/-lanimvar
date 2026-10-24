@@ -1,0 +1,16 @@
+{
+  "$comment": "Brand values needed outside the JS runtime (native config). Read by app.config.ts and src/brand/identity.ts. Icon/splash art is PROVISIONAL until the Design Lab decision; regenerate with `npm run brand:icons`.",
+  "name": "İlanım Var",
+  "nameUpper": "İLANIM VAR",
+  "slug": "ilanim-var",
+  "scheme": "ilanimvar",
+  "bundleId": "app.ilanimvar",
+  "icon": "./assets/brand/icon.png",
+  "adaptiveIcon": {
+    "foreground": "./assets/brand/adaptive-foreground.png",
+    "monochrome": "./assets/brand/adaptive-monochrome.png",
+    "background": "#0A1124"
+  },
+  "splash": { "image": "./assets/brand/splash-mark.png", "background": "#0A1124", "imageWidth": 120 },
+  "favicon": "./assets/brand/favicon.png"
+}
