@@ -32,41 +32,64 @@ const WARN_AT = 10;
  * Price first (the decision driver), then where (AREA only, never the exact
  * address), how long, what is needed, who asks. The ring is honest time.
  */
-export function IncomingTaskSheet({ visible, offer, seconds = 45, accepting, onAccept, onPass, onExpire }: { visible: boolean; offer: IncomingOffer; seconds?: number; accepting?: boolean; onAccept: () => void; onPass: () => void; onExpire: () => void }) {
+export interface IncomingTaskSheetProps {
+  visible: boolean;
+  offer: IncomingOffer;
+  seconds?: number;
+  accepting?: boolean;
+  onAccept: () => void;
+  onPass: () => void;
+  onExpire: () => void;
+}
+
+/** The offer as a takeover sheet (product). */
+export function IncomingTaskSheet({ visible, onPass, ...rest }: IncomingTaskSheetProps) {
+  return (
+    <Sheet visible={visible} onClose={onPass} dismissible={false} tone="dark" accessibilityLabel={t('incoming.kicker')}>
+      <IncomingOfferContent running={visible} onPass={onPass} {...rest} />
+    </Sheet>
+  );
+}
+
+/**
+ * A new offer takes over in ink — it should feel like a call coming in.
+ * Price first (the decision driver), then where (AREA only, never the exact
+ * address), how long, what is needed, who asks. The ring is honest time.
+ */
+export function IncomingOfferContent({ running, offer, seconds = 45, accepting, onAccept, onPass, onExpire }: Omit<IncomingTaskSheetProps, 'visible'> & { running: boolean }) {
   const theme = useTheme();
   const motion = useMotion();
   const fire = useHaptics();
   const c = theme.color;
   const g = theme.layout.gutter;
   const [left, setLeft] = useState(seconds);
-  const [wasVisible, setWasVisible] = useState(visible);
-  if (visible !== wasVisible) {
-    setWasVisible(visible);
-    if (visible) setLeft(seconds);
+  const [wasRunning, setWasRunning] = useState(running);
+  if (running !== wasRunning) {
+    setWasRunning(running);
+    if (running) setLeft(seconds);
   }
   const expire = useEffectEvent(() => onExpire());
 
   useEffect(() => {
-    if (!visible) return;
+    if (!running) return;
     fire('incoming');
     const id = setInterval(() => setLeft((s) => Math.max(0, s - 1)), motion.ms(1000));
     return () => clearInterval(id);
-  }, [visible, motion, fire]);
+  }, [running, motion, fire]);
 
   useEffect(() => {
-    if (!visible) return;
+    if (!running) return;
     if (left === WARN_AT) fire('warning');
     if (left === 0 && !accepting) {
       const id = setTimeout(expire, motion.ms(1200));
       return () => clearTimeout(id);
     }
-  }, [left, visible, accepting, fire, motion]);
+  }, [left, running, accepting, fire, motion]);
 
   const warn = left <= WARN_AT;
   const expired = left === 0 && !accepting;
 
   return (
-    <Sheet visible={visible} onClose={onPass} dismissible={false} tone="dark" accessibilityLabel={t('incoming.kicker')}>
       <View style={{ paddingHorizontal: g, paddingTop: theme.space[2], gap: theme.space[5] }}>
         <View style={styles.header}>
           <View style={styles.kicker}>
@@ -109,7 +132,7 @@ export function IncomingTaskSheet({ visible, offer, seconds = 45, accepting, onA
         ) : (
           <View style={styles.actions}>
             <View style={{ width: 96 }}>
-              <PassButton onPress={onPass} disabled={accepting} />
+              <Button level="tertiary" onInverse label={t('incoming.pass')} onPress={onPass} disabled={accepting} />
             </View>
             <View style={styles.flex}>
               <Button label={t('incoming.accept')} onPress={onAccept} loading={accepting} icon="arrowRight" iconPosition="trailing" />
@@ -117,17 +140,6 @@ export function IncomingTaskSheet({ visible, offer, seconds = 45, accepting, onA
           </View>
         )}
       </View>
-    </Sheet>
-  );
-}
-
-function PassButton({ onPress, disabled }: { onPress: () => void; disabled?: boolean }) {
-  const theme = useTheme();
-  // A quiet, translucent button on ink: present but clearly secondary.
-  return (
-    <View style={{ borderRadius: theme.radii.button, overflow: 'hidden', backgroundColor: theme.color.surface.inverseRaised }}>
-      <Button level="ghost" label={t('incoming.pass')} onPress={onPress} disabled={disabled} />
-    </View>
   );
 }
 

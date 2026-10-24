@@ -23,10 +23,15 @@ export interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   accessibilityHint?: string;
+  /** On ink surfaces: ghost and tertiary switch to light-on-dark. */
+  onInverse?: boolean;
 }
 
-function useColors(level: ButtonLevel, disabled: boolean) {
+function useColors(level: ButtonLevel, disabled: boolean, onInverse: boolean) {
   const { color: c } = useTheme();
+  if (onInverse && (level === 'ghost' || level === 'tertiary')) {
+    return { bg: level === 'tertiary' ? c.surface.inverseRaised : 'transparent', fg: disabled ? c.ink.onInverseTertiary : c.ink.onInverse };
+  }
   if (disabled && level !== 'ghost') return { bg: c.surface.field, fg: c.ink.tertiary };
   switch (level) {
     case 'primary':
@@ -65,10 +70,11 @@ export function Button({
   loading = false,
   disabled = false,
   accessibilityHint,
+  onInverse = false,
 }: ButtonProps) {
   const theme = useTheme();
   const motion = useMotion();
-  const { bg, fg } = useColors(level, disabled);
+  const { bg, fg } = useColors(level, disabled, onInverse);
   const l = useSharedValue(loading ? 1 : 0);
   const reduced = motion.reduced;
 

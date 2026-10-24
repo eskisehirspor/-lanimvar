@@ -7,7 +7,7 @@ export { Callout, EmptyState, Skeleton, SuccessMoment, TaskRowSkeleton } from '.
 export { Field } from './Field';
 export { Icon, type IconName } from './Icon';
 export { IconButton } from './IconButton';
-export { IncomingTaskSheet, type IncomingOffer } from './IncomingTaskSheet';
+export { IncomingOfferContent, IncomingTaskSheet, type IncomingOffer } from './IncomingTaskSheet';
 export { Keypad } from './Keypad';
 export { LabelValueBlock } from './LabelValueBlock';
 export { Divider, Panel, SectionHeader, StepProgress } from './Layout';

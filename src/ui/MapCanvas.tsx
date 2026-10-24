@@ -16,16 +16,15 @@ const MAJOR_Y = [156, 318];
 const MINOR_X = [52, 206, 360];
 const MINOR_Y = [70, 238, 396];
 /** The destination (the customer's door) and where the area circle centres (offset on purpose). */
-export const MAP_DEST: [number, number] = [286, 112];
-const AREA_CENTER: [number, number] = [262, 138];
+export const MAP_DEST: [number, number] = [206, 238];
+const AREA_CENTER: [number, number] = [190, 222];
 /** The Tasker's route along the streets to the door. */
 export const MAP_ROUTE: [number, number][] = [
-  [52, 396],
-  [52, 318],
-  [128, 318],
-  [128, 156],
+  [360, 70],
+  [286, 70],
   [286, 156],
-  [286, 112],
+  [206, 156],
+  [206, 238],
 ];
 
 export type MapMode = 'plain' | 'approx' | 'exact' | 'route';
@@ -55,6 +54,7 @@ function useBlocks() {
 
 export interface MapCanvasProps {
   mode?: MapMode;
+  /** Fixed height; omit to fill the parent. */
   height?: number;
   /** 0..1 position of the Tasker along MAP_ROUTE (route mode). */
   progress?: SharedValue<number>;
@@ -68,7 +68,7 @@ export interface MapCanvasProps {
  * approx = a soft area and no pin; exact = the area collapses into a pin;
  * route = the Tasker travelling the streets to the door.
  */
-export function MapCanvas({ mode = 'plain', height = 300, progress, overlay, rounded }: MapCanvasProps) {
+export function MapCanvas({ mode = 'plain', height, progress, overlay, rounded }: MapCanvasProps) {
   const theme = useTheme();
   const motion = useMotion();
   const c = theme.color;
@@ -92,7 +92,7 @@ export function MapCanvas({ mode = 'plain', height = 300, progress, overlay, rou
 
   return (
     <View
-      style={[styles.wrap, { height, backgroundColor: c.map.land, borderRadius: rounded ? theme.radii.panel : 0 }]}
+      style={[styles.wrap, height ? { height } : styles.fill, { backgroundColor: c.map.land, borderRadius: rounded ? theme.radii.panel : 0 }]}
       onLayout={(ev) => setSize({ w: ev.nativeEvent.layout.width, h: ev.nativeEvent.layout.height })}
     >
       <Svg width="100%" height="100%" viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid slice">
@@ -181,6 +181,7 @@ function RouteMarker({ progress, scale, offX, offY }: { progress: SharedValue<nu
 
 const styles = StyleSheet.create({
   wrap: { overflow: 'hidden', width: '100%' },
+  fill: { flex: 1 },
   pin: { position: 'absolute', width: 36, alignItems: 'center' },
   pinHead: { width: 36, height: 36, borderRadius: 18, borderWidth: 3, alignItems: 'center', justifyContent: 'center' },
   pinDot: { width: 12, height: 12, borderRadius: 6 },
