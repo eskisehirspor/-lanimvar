@@ -8,6 +8,8 @@ import { fontFamilies, type TypeDirection } from '@/brand/fonts';
  *  UI      — everything else. Quiet, precise, tabular where numbers move.
  */
 export type TypeVariant =
+  | 'display.poster'
+  | 'numeric.mega'
   | 'display.xl'
   | 'display.l'
   | 'display.m'
@@ -34,11 +36,14 @@ export interface TypeToken {
   voice: 'display' | 'ui';
 }
 
-type DisplayKey = 'display.xl' | 'display.l' | 'display.m' | 'numeric.hero' | 'numeric.pin';
+type DisplayKey = 'display.poster' | 'numeric.mega' | 'display.xl' | 'display.l' | 'display.m' | 'numeric.hero' | 'numeric.pin';
 type Spec = Omit<TypeToken, 'fontFamily' | 'voice'> & { weight: 'heavy' | 'bold' };
 
 const displaySpecs: Record<TypeDirection, Record<DisplayKey, Spec>> = {
   standard: {
+    // Signage moments: status as a poster, numbers that fill the width.
+    'display.poster': { weight: 'heavy', fontSize: 58, lineHeight: 62, letterSpacing: -2.4 },
+    'numeric.mega': { weight: 'heavy', fontSize: 96, lineHeight: 92, letterSpacing: -4.5, tabular: true },
     'display.xl': { weight: 'heavy', fontSize: 40, lineHeight: 44, letterSpacing: -1.5 },
     'display.l': { weight: 'bold', fontSize: 30, lineHeight: 34, letterSpacing: -0.9 },
     'display.m': { weight: 'bold', fontSize: 23, lineHeight: 28, letterSpacing: -0.5 },
@@ -46,6 +51,8 @@ const displaySpecs: Record<TypeDirection, Record<DisplayKey, Spec>> = {
     'numeric.pin': { weight: 'bold', fontSize: 40, lineHeight: 48, letterSpacing: 0, tabular: true },
   },
   condensed: {
+    'display.poster': { weight: 'heavy', fontSize: 76, lineHeight: 78, letterSpacing: -0.6 },
+    'numeric.mega': { weight: 'heavy', fontSize: 128, lineHeight: 112, letterSpacing: -1.5, tabular: true },
     'display.xl': { weight: 'heavy', fontSize: 50, lineHeight: 50, letterSpacing: -0.4 },
     'display.l': { weight: 'bold', fontSize: 38, lineHeight: 40, letterSpacing: -0.2 },
     'display.m': { weight: 'bold', fontSize: 28, lineHeight: 30, letterSpacing: 0 },

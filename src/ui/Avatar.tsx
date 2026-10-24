@@ -11,15 +11,17 @@ export interface AvatarProps {
   verified?: boolean;
   /** Ring separates the avatar from busy backgrounds (maps, stacks). */
   ring?: boolean;
-  tone?: 'neutral' | 'brand' | 'inverse';
+  tone?: 'warm' | 'neutral' | 'brand' | 'inverse';
 }
 
 /** Person marker. Initials until real photos exist; verified adds a success badge. */
-export function Avatar({ initials, size = 44, verified, ring, tone = 'neutral' }: AvatarProps) {
+export function Avatar({ initials, size = 44, verified, ring, tone = 'warm' }: AvatarProps) {
   const theme = useTheme();
   const c = theme.color;
-  const bg = tone === 'brand' ? c.brand.fill : tone === 'inverse' ? c.surface.inverse : c.surface.fieldStrong;
-  const fg = tone === 'brand' ? c.brand.onFill : tone === 'inverse' ? c.ink.onInverse : c.ink.primary;
+  // Warm monograms: each person keeps the same hue everywhere (stable hash of initials).
+  const hue = theme.avatar.hues[[...initials].reduce((a, ch) => a + ch.charCodeAt(0), 0) % theme.avatar.hues.length]!;
+  const bg = tone === 'brand' ? c.brand.fill : tone === 'inverse' ? c.surface.inverse : tone === 'warm' ? hue : c.surface.fieldStrong;
+  const fg = tone === 'brand' ? c.brand.onFill : tone === 'inverse' ? c.ink.onInverse : tone === 'warm' ? theme.avatar.ink : c.ink.primary;
   const badge = size >= 44 ? 18 : 14;
   return (
     <View style={{ width: size, height: size }}>

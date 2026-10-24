@@ -35,7 +35,35 @@ export interface PalettePrimitives {
     criticalTint: string;
   };
   map: { land: string; block: string; road: string; water: string; park: string };
+  /** Night scheme for live, immersive moments (searching, tracking, offers, PIN). */
+  night: {
+    ink: { 900: string; 700: string; 500: string };
+    paper: { base: string; grouped: string; field: string; fieldStrong: string; panel: string };
+    brand: { fill: string; fillPressed: string; onFill: string; dot: string; tint: string; text: string };
+    signal: { success: string; successTint: string; attention: string; attentionTint: string; critical: string; criticalPressed: string; criticalTint: string; onCritical: string };
+    map: { land: string; block: string; road: string; water: string; park: string };
+  };
+  /** Warm monogram backgrounds for people (no photos yet). */
+  avatarHues: string[];
 }
+
+const nightNeutrals = {
+  ink: { 900: '#F5F6F8', 700: '#B9BDC6', 500: '#8E939E' },
+  paper: { base: '#0A0D14', grouped: '#0A0D14', panel: '#141922', field: '#1C222C', fieldStrong: '#2A313C' },
+  map: { land: '#0E121A', block: '#161B24', road: '#262C38', water: '#112A40', park: '#12261C' },
+};
+
+const nightSignal = {
+  success: '#45D483',
+  successTint: '#0F2A1D',
+  attention: '#FFA25E',
+  attentionTint: '#33200F',
+  // Bright coral-red with dark text: legible as text on night AND as a fill.
+  critical: '#FF6B66',
+  criticalPressed: '#E85550',
+  criticalTint: '#3A1515',
+  onCritical: '#0A0D14',
+};
 
 export const palettes: Record<PaletteId, PalettePrimitives> = {
   p1: {
@@ -56,6 +84,8 @@ export const palettes: Record<PaletteId, PalettePrimitives> = {
       criticalTint: '#FCE8E8',
     },
     map: { land: '#EDECE6', block: '#E2E0D8', road: '#FFFFFF', water: '#CADCE4', park: '#D9E5D2' },
+    night: { ...nightNeutrals, brand: { fill: '#FFD12E', fillPressed: '#F2BF00', onFill: '#0A0D14', dot: '#FFD12E', tint: '#2B2610', text: '#FFD12E' }, signal: nightSignal },
+    avatarHues: ['#FFD9A8', '#F7C6B5', '#CFE3C8', '#C9DDF0', '#E5D2F2'],
   },
   p2: {
     id: 'p2',
@@ -76,6 +106,8 @@ export const palettes: Record<PaletteId, PalettePrimitives> = {
       criticalTint: '#FCE8E8',
     },
     map: { land: '#EAEEEC', block: '#DEE4E1', road: '#FFFFFF', water: '#C3DDE0', park: '#D3E5D6' },
+    night: { ...nightNeutrals, brand: { fill: '#3AD7B5', fillPressed: '#22C2A0', onFill: '#04140F', dot: '#3AD7B5', tint: '#0F2A24', text: '#4FE0C1' }, signal: { ...nightSignal, success: '#4FE0C1' } },
+    avatarHues: ['#CDEBE2', '#F3D9B8', '#D5E1F2', '#EBD3C8', '#DDE8C7'],
   },
   p3: {
     id: 'p3',
@@ -96,6 +128,8 @@ export const palettes: Record<PaletteId, PalettePrimitives> = {
       criticalTint: '#FBE4EB',
     },
     map: { land: '#EFEBE5', block: '#E4DED5', road: '#FFFFFF', water: '#CBDCE2', park: '#DCE5D1' },
+    night: { ...nightNeutrals, brand: { fill: '#FF8259', fillPressed: '#F06C42', onFill: '#1A0A04', dot: '#FF8259', tint: '#331A12', text: '#FF9676' }, signal: { ...nightSignal, critical: '#FF6B8A', criticalPressed: '#EB5577' } },
+    avatarHues: ['#F6D3C4', '#F3DFB5', '#D7E4CF', '#D3DDEE', '#EAD5E6'],
   },
 };
 

@@ -20,7 +20,7 @@ The Lab exists only in development builds, or in a preview build with `EXPO_PUBL
 
 | Section | What to judge |
 |---|---|
-| Ekranlar | 8 full-screen compositions (home, task, budget, searching, live + PIN, Tasker offer, PIN at the door, completed) — static mocks built only from product primitives |
+| Ekranlar | 10 full-screen compositions: voice + photo task creation, price dial, night searching and tracking, PIN ticket, swipe-to-accept offer, brand-flood "accepted" and "done" moments — static mocks built only from product primitives |
 | Karşılaştır | 3 palettes × 2 type directions × 2 button shapes, four real screens side by side per combination |
 | Hareket | 11 transitions, each playable alone with its product reason |
 | Bileşenler | Every primitive in every state; sheets and emergency are live |

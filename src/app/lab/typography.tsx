@@ -8,6 +8,8 @@ import { ThemeProvider, useTheme, type TypeVariant } from '@/theme';
 import { Icon, Text } from '@/ui';
 
 const samples: Record<TypeVariant, string> = {
+  'display.poster': 'KAPIDA.',
+  'numeric.mega': '7 DK',
   'display.xl': 'Bugün ne\nhalledelim?',
   'display.l': 'Mehmet kapında.',
   'display.m': 'Güvende misin?',
@@ -23,7 +25,7 @@ const samples: Record<TypeVariant, string> = {
   micro: 'yaklaşık konum',
   tab: 'Görevler',
 };
-const order: TypeVariant[] = ['display.xl', 'display.l', 'display.m', 'numeric.hero', 'numeric.pin', 'title', 'body.l', 'body', 'label', 'button', 'meta', 'micro', 'tab', 'numeric.key'];
+const order: TypeVariant[] = ['display.poster', 'numeric.mega', 'display.xl', 'display.l', 'display.m', 'numeric.hero', 'numeric.pin', 'title', 'body.l', 'body', 'label', 'button', 'meta', 'micro', 'tab', 'numeric.key'];
 const caseTests = ['istanbul', 'iş ilanı', 'ışık', 'çiğdem', 'eskişehir', 'ılgaz'];
 
 export default function TypographyLab() {

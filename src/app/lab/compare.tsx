@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { typeDirectionMeta, type TypeDirection } from '@/brand/fonts';
 import { paletteOrder, palettes, type PaletteId } from '@/brand/palettes';
-import { Completed, CustomerHome, LiveTask, TaskerOffer } from '@/features/lab/screens/compositions';
+import { Accepted, CustomerHome, LiveTask, TaskerOffer } from '@/features/lab/screens/compositions';
 import { useLab, useLabMotion } from '@/features/lab/store';
 import { ThemeProvider, useTheme, type ButtonShape } from '@/theme';
 import { buttonShapeMeta } from '@/theme/tokens';
@@ -18,7 +18,7 @@ interface Combo {
 }
 const combos: Combo[] = paletteOrder.flatMap((palette) => (['condensed', 'standard'] as const).flatMap((type) => (['pill', 'slab'] as const).map((shape) => ({ palette, type, shape }))));
 const label = (c: Combo) => `${palettes[c.palette].code} · ${typeDirectionMeta[c.type].code} · ${buttonShapeMeta[c.shape].name}`;
-const phones = [CustomerHome, LiveTask, TaskerOffer, Completed];
+const phones = [CustomerHome, Accepted, LiveTask, TaskerOffer];
 
 /**
  * The approval matrix: 3 palettes × 2 type directions × 2 button shapes,

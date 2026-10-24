@@ -116,6 +116,7 @@ export function MapCanvas({ mode = 'plain', height, progress, overlay, rounded }
         ))}
         {mode === 'route' ? (
           <G>
+            {theme.scheme === 'night' ? <Path d={routeD(MAP_ROUTE)} stroke={c.map.route} strokeOpacity={0.18} strokeWidth={26} fill="none" strokeLinejoin="round" strokeLinecap="round" /> : null}
             <Path d={routeD(MAP_ROUTE)} stroke={c.map.routeCasing} strokeWidth={11} fill="none" strokeLinejoin="round" strokeLinecap="round" />
             <Path d={routeD(MAP_ROUTE)} stroke={c.map.route} strokeWidth={5} fill="none" strokeLinejoin="round" strokeLinecap="round" />
           </G>

@@ -8,7 +8,7 @@ import { useTheme } from '@/theme';
 import { Icon, Tactile, Text, type IconName } from '@/ui';
 
 const sections: { href: Href; title: string; body: string; icon: IconName }[] = [
-  { href: '/lab/screens', title: 'Ekranlar', body: '8 tam ekran kompozisyon: müşteri ve görevli akışının kilit anları', icon: 'home' },
+  { href: '/lab/screens', title: 'Ekranlar', body: '10 tam ekran: sesle ilan, fiyat kadranı, canlı takip, görevli teklifi, kabul ve “Hallettin” anları', icon: 'home' },
   { href: '/lab/compare', title: 'Karşılaştır', body: '3 palet × 2 tip yönü × 2 buton biçimi, aynı ekranlarda', icon: 'sliders' },
   { href: '/lab/motion', title: 'Hareket', body: '11 geçiş, her biri ürün gerekçesiyle tek tek oynatılır', icon: 'play' },
   { href: '/lab/primitives', title: 'Bileşenler', body: 'Tüm durumlarıyla gerçek bileşenler', icon: 'tasks' },

@@ -30,7 +30,50 @@ export interface ColorRoles {
   shadow: string;
 }
 
-export function buildColorRoles(p: PalettePrimitives): ColorRoles {
+export type Scheme = 'light' | 'night';
+
+export function buildColorRoles(p: PalettePrimitives, scheme: Scheme = 'light'): ColorRoles {
+  return scheme === 'night' ? buildNight(p) : buildLight(p);
+}
+
+function buildNight(p: PalettePrimitives): ColorRoles {
+  const n = p.night;
+  const white = '#FFFFFF';
+  return {
+    ink: {
+      primary: n.ink[900],
+      secondary: n.ink[700],
+      tertiary: n.ink[500],
+      // "Inverse" on night is light: secondary buttons become white with dark text.
+      onInverse: n.paper.base,
+      onInverseSecondary: withAlpha(n.paper.base, 0.72),
+      onInverseTertiary: withAlpha(n.paper.base, 0.55),
+    },
+    surface: {
+      base: n.paper.base,
+      grouped: n.paper.grouped,
+      panel: n.paper.panel,
+      field: n.paper.field,
+      fieldStrong: n.paper.fieldStrong,
+      inverse: n.ink[900],
+      inverseRaised: withAlpha(n.paper.base, 0.08),
+      hairline: withAlpha(white, 0.09),
+      hairlineStrong: withAlpha(white, 0.18),
+      hairlineOnInverse: withAlpha(n.paper.base, 0.12),
+      scrim: withAlpha('#000000', 0.6),
+    },
+    tint: { brand: n.brand.tint, success: n.signal.successTint, attention: n.signal.attentionTint, safety: n.signal.criticalTint },
+    brand: { fill: n.brand.fill, fillPressed: n.brand.fillPressed, onFill: n.brand.onFill, dot: n.brand.dot, dotOutline: n.brand.dot, text: n.brand.text },
+    status: { live: n.brand.text, active: n.ink[900], attention: n.signal.attention, success: n.signal.success, neutral: n.ink[700] },
+    safety: { critical: n.signal.critical, criticalPressed: n.signal.criticalPressed, onCritical: n.signal.onCritical },
+    focus: { ring: n.brand.dot },
+    link: { color: n.brand.text, underline: false },
+    map: { ...n.map, route: n.brand.dot, routeCasing: n.paper.base },
+    shadow: '#000000',
+  };
+}
+
+function buildLight(p: PalettePrimitives): ColorRoles {
   const brandText = p.brand.text ?? p.ink[900];
   const white = p.paper.base;
   return {
