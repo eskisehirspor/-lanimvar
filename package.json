@@ -51,7 +51,8 @@
     "lint": "expo lint",
     "test": "jest",
     "brand:wordmark": "python3 scripts/brand/generate-wordmark.py",
-    "brand:icons": "python3 scripts/brand/generate-icons.py"
+    "brand:icons": "python3 scripts/brand/generate-icons.py",
+    "preview:web": "EXPO_PUBLIC_WEB_PREVIEW=1 EXPO_PUBLIC_DESIGN_LAB=1 expo export --platform web --output-dir dist-preview/web && python3 scripts/preview/build-single-file.py"
   },
   "private": true,
   "jest": {

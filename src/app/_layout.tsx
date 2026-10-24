@@ -9,13 +9,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { fontAssets } from '@/brand/fontAssets';
 import { designLabEnabled } from '@/features/lab/enabled';
+import { isWebPreview } from '@/lib/preview';
 import { bindQueryFocus, queryClient } from '@/lib/query/queryClient';
 import { defaultThemeConfig, ThemeProvider, useTheme } from '@/theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts(fontAssets);
+  const [loaded, error] = useFonts(isWebPreview ? {} : fontAssets);
   useEffect(() => bindQueryFocus(), []);
   useEffect(() => {
     if (loaded || error) SplashScreen.hideAsync().catch(() => undefined);

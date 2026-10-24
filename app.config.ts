@@ -23,7 +23,8 @@ const config: ExpoConfig = {
   },
   web: { favicon: brand.favicon, output: 'single' },
   plugins: [
-    'expo-router',
+    // Single-file web previews cannot lazy-load route chunks, so they bundle every route up front.
+    ['expo-router', process.env.EXPO_PUBLIC_WEB_PREVIEW === '1' ? { asyncRoutes: { web: false } } : {}],
     'expo-font',
     ['expo-splash-screen', { image: brand.splash.image, imageWidth: brand.splash.imageWidth, backgroundColor: brand.splash.background }],
   ],
