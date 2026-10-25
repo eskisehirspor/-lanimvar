@@ -1,94 +1,95 @@
-import { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View, type NativeScrollEvent, type NativeSyntheticEvent, type ScrollViewInstance } from 'react-native';
+import { useEffect, useRef, useState } from "react";
+import {
+  ScrollView,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  type ScrollViewInstance,
+} from "react-native";
 
-import { useHaptics } from '@/lib/haptics';
-import { useTheme } from '@/theme';
+import { useHaptics } from "@/lib/haptics";
 
-import { Text } from './Text';
+import {
+  Column,
+  Rows,
+  VISIBLE,
+  WHEEL_ITEM,
+  type WheelItem,
+  type WheelPickerProps,
+} from "./WheelParts";
 
-const ITEM = 46;
-const VISIBLE = 5;
-
-export interface WheelItem<T> {
-  label: string;
-  value: T;
-}
+export type { WheelItem };
 
 /**
- * A scrolling wheel column (iOS picker feel on every platform): items snap to
- * the centre band, a selection tick fires on each step, far rows fade.
+ * A scrolling wheel column (native). The OS snaps rows to the centre band; the
+ * value is committed only when the scroll has fully stopped, so nothing ever
+ * fights the finger. Web uses WheelPicker.web.tsx (CSS scroll snap).
  */
-export function WheelPicker<T extends string | number>({ items, value, onChange, flex = 1, accessibilityLabel }: { items: WheelItem<T>[]; value: T; onChange: (v: T) => void; flex?: number; accessibilityLabel: string }) {
-  const theme = useTheme();
+export function WheelPicker<T extends string | number>({
+  items,
+  value,
+  onChange,
+  flex = 1,
+  accessibilityLabel,
+}: WheelPickerProps<T>) {
   const fire = useHaptics();
   const ref = useRef<ScrollViewInstance>(null);
-  const index = Math.max(0, items.findIndex((i) => i.value === value));
+  const index = Math.max(
+    0,
+    items.findIndex((i) => i.value === value),
+  );
   const [live, setLive] = useState(index);
-  const settle = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pad = ((VISIBLE - 1) / 2) * ITEM;
+  const dragging = useRef(false);
 
-  // Keep the wheel on the value when it changes from outside (e.g. day clamped by month).
+  // Follow outside changes (e.g. the day clamped by a shorter month) when idle.
   useEffect(() => {
-    ref.current?.scrollTo({ y: index * ITEM, animated: false });
+    if (!dragging.current)
+      ref.current?.scrollTo({ y: index * WHEEL_ITEM, animated: false });
   }, [index, items.length]);
 
-  const commit = (y: number) => {
-    const i = Math.max(0, Math.min(items.length - 1, Math.round(y / ITEM)));
-    ref.current?.scrollTo({ y: i * ITEM, animated: true });
-    const item = items[i];
+  const at = (y: number) =>
+    Math.max(0, Math.min(items.length - 1, Math.round(y / WHEEL_ITEM)));
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const i = at(e.nativeEvent.contentOffset.y);
+    if (i !== live) {
+      setLive(i);
+      fire("select");
+    }
+  };
+  const commit = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    dragging.current = false;
+    const item = items[at(e.nativeEvent.contentOffset.y)];
     if (item && item.value !== value) onChange(item.value);
   };
 
-  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const y = e.nativeEvent.contentOffset.y;
-    const i = Math.max(0, Math.min(items.length - 1, Math.round(y / ITEM)));
-    if (i !== live) {
-      setLive(i);
-      fire('select');
-    }
-    // Web has no momentum-end event: settle after the scroll goes quiet.
-    if (settle.current) clearTimeout(settle.current);
-    settle.current = setTimeout(() => commit(y), 140);
-  };
-
   return (
-    <View style={{ flex, height: ITEM * VISIBLE }} accessibilityRole="adjustable" accessibilityLabel={accessibilityLabel} accessibilityValue={{ text: items[index]?.label }}>
+    <Column
+      live={live}
+      items={items}
+      flex={flex}
+      accessibilityLabel={accessibilityLabel}
+      index={index}
+    >
       <ScrollView
         ref={ref}
         showsVerticalScrollIndicator={false}
-        snapToInterval={ITEM}
+        snapToInterval={WHEEL_ITEM}
         decelerationRate="fast"
         scrollEventThrottle={16}
         onScroll={onScroll}
-        contentOffset={{ x: 0, y: index * ITEM }}
-        contentContainerStyle={{ paddingVertical: pad }}
+        onScrollBeginDrag={() => (dragging.current = true)}
+        onMomentumScrollEnd={commit}
+        onScrollEndDrag={(e) => {
+          // No momentum (slow release): the drag end is the stop.
+          if (Math.abs(e.nativeEvent.velocity?.y ?? 0) < 0.05) commit(e);
+        }}
+        contentOffset={{ x: 0, y: index * WHEEL_ITEM }}
+        contentContainerStyle={{
+          paddingVertical: ((VISIBLE - 1) / 2) * WHEEL_ITEM,
+        }}
         nestedScrollEnabled
       >
-        {items.map((it, i) => {
-          const d = Math.abs(i - live);
-          return (
-            <View key={String(it.value)} style={styles.item}>
-              <Text
-                variant={d === 0 ? 'title' : 'body.l'}
-                tone={d === 0 ? 'primary' : 'tertiary'}
-                style={{ opacity: d === 0 ? 1 : d === 1 ? 0.7 : 0.35, fontSize: d === 0 ? 20 : 17 }}
-                onPress={() => {
-                  ref.current?.scrollTo({ y: i * ITEM, animated: true });
-                  onChange(it.value);
-                }}
-              >
-                {it.label}
-              </Text>
-            </View>
-          );
-        })}
+        <Rows items={items} live={live} />
       </ScrollView>
-      <View pointerEvents="none" style={[styles.band, { top: pad, borderColor: theme.color.surface.hairlineStrong }]} />
-    </View>
+    </Column>
   );
 }
-
-const styles = StyleSheet.create({
-  item: { height: ITEM, alignItems: 'center', justifyContent: 'center' },
-  band: { position: 'absolute', left: 4, right: 4, height: ITEM, borderTopWidth: 1.5, borderBottomWidth: 1.5 },
-});
