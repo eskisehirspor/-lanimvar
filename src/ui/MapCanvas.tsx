@@ -30,6 +30,14 @@ export const MAP_ROUTE: [number, number][] = [
 export type MapMode = 'plain' | 'approx' | 'exact' | 'route';
 export type Project = (x: number, y: number) => { left: number; top: number };
 
+/** The same "cover" projection the canvas uses, for placing things over a map of a known size. */
+export function mapProjection(w: number, h: number): Project {
+  const scale = Math.max(w / MAP_W, h / MAP_H);
+  const offX = (w - MAP_W * scale) / 2;
+  const offY = (h - MAP_H * scale) / 2;
+  return (x, y) => ({ left: x * scale + offX, top: y * scale + offY });
+}
+
 function routeD(pts: [number, number][]) {
   return pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ');
 }

@@ -16,6 +16,7 @@ fonts = {
   'InstrumentSans_500Medium': 'instrument-sans/500Medium/InstrumentSans_500Medium.ttf',
   'InstrumentSans_600SemiBold': 'instrument-sans/600SemiBold/InstrumentSans_600SemiBold.ttf',
   'InstrumentSans_700Bold': 'instrument-sans/700Bold/InstrumentSans_700Bold.ttf',
+  'InstrumentSerif_400Regular_Italic': 'instrument-serif/400Regular_Italic/InstrumentSerif_400Regular_Italic.ttf',
 }
 faces = '\n'.join(
   f"@font-face{{font-family:'{name}';src:url(data:font/ttf;base64,{base64.b64encode((ROOT/'node_modules/@expo-google-fonts'/rel).read_bytes()).decode()}) format('truetype');font-display:block}}"

@@ -1,6 +1,6 @@
 /**
  * Font FILES, loaded once by the root layout. Imported per weight so only the
- * eight files we use are bundled (the package index would pull every weight).
+ * nine files we use are bundled (the package index would pull every weight).
  */
 import { BarlowCondensed_700Bold } from '@expo-google-fonts/barlow-condensed/700Bold';
 import { BarlowCondensed_800ExtraBold } from '@expo-google-fonts/barlow-condensed/800ExtraBold';
@@ -10,6 +10,7 @@ import { InstrumentSans_400Regular } from '@expo-google-fonts/instrument-sans/40
 import { InstrumentSans_500Medium } from '@expo-google-fonts/instrument-sans/500Medium';
 import { InstrumentSans_600SemiBold } from '@expo-google-fonts/instrument-sans/600SemiBold';
 import { InstrumentSans_700Bold } from '@expo-google-fonts/instrument-sans/700Bold';
+import { InstrumentSerif_400Regular_Italic } from '@expo-google-fonts/instrument-serif/400Regular_Italic';
 
 import type { FontFamilyName } from './fonts';
 
@@ -22,4 +23,5 @@ export const fontAssets = {
   InstrumentSans_500Medium,
   InstrumentSans_600SemiBold,
   InstrumentSans_700Bold,
+  InstrumentSerif_400Regular_Italic,
 } satisfies Record<FontFamilyName, unknown>;

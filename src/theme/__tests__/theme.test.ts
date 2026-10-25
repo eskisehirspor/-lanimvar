@@ -65,7 +65,7 @@ describe('createTheme', () => {
         for (const buttonShape of ['pill', 'slab'] as const) {
           const th = createTheme({ palette, typeDirection, buttonShape, textScale: 1 });
           expect(th.radii.button).toBe(buttonShape === 'pill' ? 999 : 14);
-          expect(Object.keys(th.type)).toHaveLength(16);
+          expect(Object.keys(th.type)).toHaveLength(17);
         }
   });
   it('keeps meta text at the minimum size', () => {

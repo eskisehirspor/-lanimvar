@@ -8,6 +8,7 @@ import { useTheme } from '@/theme';
 import { Icon, Tactile, Text, type IconName } from '@/ui';
 
 const sections: { href: Href; title: string; body: string; icon: IconName }[] = [
+  { href: '/lab/prototype', title: 'Prototip', body: 'Şimdi Lazım hikâyesi baştan sona, dokunarak: sesle ilan, arama, kabul, canlı takip, bitiş', icon: 'play' },
   { href: '/lab/screens', title: 'Ekranlar', body: '10 tam ekran: sesle ilan, fiyat kadranı, canlı takip, görevli teklifi, kabul ve “Hallettin” anları', icon: 'home' },
   { href: '/lab/compare', title: 'Karşılaştır', body: '3 palet × 2 tip yönü × 2 buton biçimi, aynı ekranlarda', icon: 'sliders' },
   { href: '/lab/motion', title: 'Hareket', body: '11 geçiş, her biri ürün gerekçesiyle tek tek oynatılır', icon: 'play' },
@@ -40,7 +41,7 @@ export default function LabHome() {
       <View style={{ paddingHorizontal: g, marginTop: 20, gap: 10 }}>
         <Tactile pressScale={0.985} onPress={() => router.push(sections[0]!.href)} style={[styles.feature, { backgroundColor: c.surface.panel, borderRadius: theme.radii.panel }]}>
           <View style={[styles.featureIcon, { backgroundColor: c.brand.fill }]}>
-            <Icon name="home" size="m" color={c.brand.onFill} weight="fill" />
+            <Icon name="play" size="m" color={c.brand.onFill} weight="fill" />
           </View>
           <Text variant="display.m" style={{ marginTop: 28 }}>
             {sections[0]!.title}

@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,6 +12,8 @@ import { Button, RouteMark, Text } from '@/ui';
 export default function Holding() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  // Development builds open straight into the Design Lab prototype.
+  if (designLabEnabled) return <Redirect href="/lab/prototype" />;
   return (
     <View style={{ flex: 1, backgroundColor: theme.color.surface.base, paddingTop: insets.top + theme.space[5], paddingBottom: insets.bottom + theme.space[5], paddingHorizontal: theme.layout.gutter, justifyContent: 'space-between' }}>
       <Wordmark capHeight={18} />

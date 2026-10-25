@@ -8,6 +8,7 @@ import { fontFamilies, type TypeDirection } from '@/brand/fonts';
  *  UI      — everything else. Quiet, precise, tabular where numbers move.
  */
 export type TypeVariant =
+  | 'display.hero'
   | 'display.poster'
   | 'numeric.mega'
   | 'display.xl'
@@ -36,11 +37,13 @@ export interface TypeToken {
   voice: 'display' | 'ui';
 }
 
-type DisplayKey = 'display.poster' | 'numeric.mega' | 'display.xl' | 'display.l' | 'display.m' | 'numeric.hero' | 'numeric.pin';
+type DisplayKey = 'display.hero' | 'display.poster' | 'numeric.mega' | 'display.xl' | 'display.l' | 'display.m' | 'numeric.hero' | 'numeric.pin';
 type Spec = Omit<TypeToken, 'fontFamily' | 'voice'> & { weight: 'heavy' | 'bold' };
 
 const displaySpecs: Record<TypeDirection, Record<DisplayKey, Spec>> = {
   standard: {
+    // Editorial hero: one per flow moment, set tight like a magazine cover.
+    'display.hero': { weight: 'heavy', fontSize: 74, lineHeight: 72, letterSpacing: -3.6 },
     // Signage moments: status as a poster, numbers that fill the width.
     'display.poster': { weight: 'heavy', fontSize: 58, lineHeight: 62, letterSpacing: -2.4 },
     'numeric.mega': { weight: 'heavy', fontSize: 96, lineHeight: 92, letterSpacing: -4.5, tabular: true },
@@ -51,6 +54,7 @@ const displaySpecs: Record<TypeDirection, Record<DisplayKey, Spec>> = {
     'numeric.pin': { weight: 'bold', fontSize: 40, lineHeight: 48, letterSpacing: 0, tabular: true },
   },
   condensed: {
+    'display.hero': { weight: 'heavy', fontSize: 98, lineHeight: 90, letterSpacing: -1.2 },
     'display.poster': { weight: 'heavy', fontSize: 76, lineHeight: 78, letterSpacing: -0.6 },
     'numeric.mega': { weight: 'heavy', fontSize: 128, lineHeight: 112, letterSpacing: -1.5, tabular: true },
     'display.xl': { weight: 'heavy', fontSize: 50, lineHeight: 50, letterSpacing: -0.4 },

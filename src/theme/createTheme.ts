@@ -1,4 +1,6 @@
 import type { TypeDirection } from '@/brand/fonts';
+import { clay, clayStage } from '@/brand/clay';
+import { grainTile } from '@/brand/generated/grain';
 import { palettes, type PaletteId } from '@/brand/palettes';
 
 import { buildColorRoles, type Scheme } from './color';
@@ -15,7 +17,7 @@ export interface ThemeConfig {
 }
 
 /** Provisional product defaults. The Design Lab decision replaces these. */
-export const defaultThemeConfig: ThemeConfig = { palette: 'p1', typeDirection: 'condensed', buttonShape: 'slab', textScale: 1, scheme: 'light' };
+export const defaultThemeConfig: ThemeConfig = { palette: 'p1', typeDirection: 'standard', buttonShape: 'pill', textScale: 1, scheme: 'light' };
 
 export function createTheme(config: ThemeConfig) {
   const palette = palettes[config.palette];
@@ -27,7 +29,9 @@ export function createTheme(config: ThemeConfig) {
     /** Warm monogram hues are pale in both schemes, so their text is always the day ink. */
     avatar: { hues: palette.avatarHues, ink: palette.ink[900] },
     /** Illustrations keep day colours in every scheme (they are objects, not UI). */
-    illustration: { ink: palette.ink[900], paper: palette.paper.base },
+    illustration: { ink: palette.ink[900], paper: palette.paper.base, clay, stage: clayStage },
+    /** Film grain laid over flood surfaces so big colour fields feel printed, not flat. */
+    texture: { grain: grainTile },
     color,
     type: buildTypeScale(config.typeDirection, config.textScale),
     space,

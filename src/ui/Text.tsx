@@ -49,18 +49,26 @@ export interface TextProps extends RNTextProps {
   /** Semibold for UI-voice variants. */
   emphasis?: boolean;
   align?: 'left' | 'center' | 'right';
+  /** Editorial accent: italic serif at the same optical size. For one or two words nested in a display line. */
+  serif?: boolean;
   children?: ReactNode;
 }
 
 /** The only text primitive: tokens, Turkish casing and tones stay consistent. */
-export function Text({ variant = 'body', tone = 'primary', emphasis, align, style, children, ...rest }: TextProps) {
+export function Text({ variant = 'body', tone = 'primary', emphasis, align, serif, style, children, selectable = false, ...rest }: TextProps) {
   const theme = useTheme();
   const token = theme.type[variant];
   const base = toTextStyle(token);
-  const s = emphasis && token.voice === 'ui' ? { ...base, fontFamily: fontFamilies.ui.semibold } : base;
+  const s = serif
+    ? // Instrument Serif has a smaller x-height: size it up so it sits level with the grotesk.
+      { ...base, fontFamily: fontFamilies.accent, fontSize: Math.round(token.fontSize * 1.14), letterSpacing: token.letterSpacing * 0.4 }
+    : emphasis && token.voice === 'ui'
+      ? { ...base, fontFamily: fontFamilies.ui.semibold }
+      : base;
+  const caps = token.caps && !serif;
   return (
-    <RNText style={[s, { color: toneColor(theme, tone) }, align ? { textAlign: align } : null, style]} {...rest}>
-      {token.caps ? Children.map(children, (ch) => (typeof ch === 'string' ? trUpper(ch) : ch)) : children}
+    <RNText selectable={selectable} style={[s, { color: toneColor(theme, tone) }, align ? { textAlign: align } : null, style]} {...rest}>
+      {caps ? Children.map(children, (ch) => (typeof ch === 'string' ? trUpper(ch) : ch)) : children}
     </RNText>
   );
 }

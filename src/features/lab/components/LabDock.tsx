@@ -23,7 +23,8 @@ export function LabDock() {
   const lab = useLab();
   const open = lab.dockOpen;
   // On the full-screen deck the trigger lives in the deck's own pill.
-  const onDeck = usePathname().endsWith('/screens');
+  const path = usePathname();
+  const onDeck = path.endsWith('/screens') || path.endsWith('/prototype');
 
   return (
     <View pointerEvents="box-none" style={[styles.host, { paddingBottom: Math.max(insets.bottom, 12) + (onDeck ? 0 : 64) }]}>

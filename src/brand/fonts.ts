@@ -12,7 +12,8 @@ export type FontFamilyName =
   | 'InstrumentSans_400Regular'
   | 'InstrumentSans_500Medium'
   | 'InstrumentSans_600SemiBold'
-  | 'InstrumentSans_700Bold';
+  | 'InstrumentSans_700Bold'
+  | 'InstrumentSerif_400Regular_Italic';
 
 export const fontFamilies = {
   /** heavy: the one hero per screen. bold: secondary display (sheet titles, status). */
@@ -26,6 +27,8 @@ export const fontFamilies = {
     semibold: 'InstrumentSans_600SemiBold',
     bold: 'InstrumentSans_700Bold',
   } satisfies Record<string, FontFamilyName>,
+  /** Editorial accent: one or two words per headline set in italic serif. Never for UI text. */
+  accent: 'InstrumentSerif_400Regular_Italic' satisfies FontFamilyName,
 };
 
 export const typeDirectionMeta: Record<TypeDirection, { code: string; name: string; face: string }> = {
