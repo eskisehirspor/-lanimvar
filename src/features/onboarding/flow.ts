@@ -26,7 +26,8 @@ export function useFlow(key: StepKey) {
     back: index > 0 ? () => router.back() : undefined,
     next: async () => {
       let i = index + 1;
-      const v = await getVerification().catch(() => null);
+      // A slow or failing check must never block the flow: then we simply don't skip.
+      const v = await Promise.race([getVerification().catch(() => null), new Promise<null>((r) => setTimeout(() => r(null), 3000))]);
       while (i < steps.length && ((steps[i] === 'phone' && v?.phoneVerified) || (steps[i] === 'email' && v?.emailVerified))) i++;
       const target = steps[Math.min(i, steps.length - 1)]!;
       router.push(hrefs[target]);

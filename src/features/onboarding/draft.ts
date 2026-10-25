@@ -27,7 +27,8 @@ export const useDraft = create<OnboardingDraft>((set) => ({
   role: 'customer',
   firstName: '',
   lastName: '',
-  birth: { d: '', m: '', y: '' },
+  // Starts on a valid date so the wheel always has a selection.
+  birth: { d: '1', m: '1', y: String(new Date().getFullYear() - 25) },
   district: '',
   neighbourhood: '',
   address: '',
