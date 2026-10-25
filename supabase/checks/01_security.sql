@@ -50,7 +50,7 @@ select checks.expect_error($$insert into public.tasks (customer_id, category, ti
 select checks.expect_error($$update public.profiles set role = 'admin' where id = auth.uid()$$, 'permission denied');
 select checks.expect_error($$select public._set_pin(gen_random_uuid(), 'generated')$$, 'permission denied');
 select checks.expect_error($$select public.admin_metrics()$$, 'not_allowed');
-select checks.expect_error($$select public.complete_onboarding('Ayşe', 'admin', true, true, 'v1')$$, 'not_allowed');
+select checks.expect_error($$select public.complete_onboarding('Ayşe', 'Kaya', date '1990-01-01', 'admin', 'Tepebaşı', null, 'Bir adres 12', null, null, null, true, true, 'v1')$$, 'not_allowed');
 
 -- ── Taskers go online; the customer creates a task; it is offered ──
 select checks.act(:tasker);

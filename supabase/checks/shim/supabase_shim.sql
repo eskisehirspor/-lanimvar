@@ -12,7 +12,7 @@ create schema extensions;
 create schema auth;
 create table auth.users (
   instance_id uuid, id uuid primary key, aud text, role text, email text, phone text,
-  phone_confirmed_at timestamptz, raw_app_meta_data jsonb, raw_user_meta_data jsonb,
+  phone_confirmed_at timestamptz, email_confirmed_at timestamptz, raw_app_meta_data jsonb, raw_user_meta_data jsonb,
   created_at timestamptz, updated_at timestamptz, deleted_at timestamptz
 );
 create function auth.uid() returns uuid language sql stable as $$
