@@ -12,7 +12,7 @@
  * Bump LEGAL_VERSION whenever a text changes: onboarding records the version
  * each person accepted (profiles.legal_version).
  */
-export const LEGAL_VERSION = '2026-10-25';
+export const LEGAL_VERSION = '2026-10-26';
 
 export type LegalDocId = 'terms' | 'privacy' | 'consent' | 'policy' | 'tasker' | 'community';
 
@@ -42,7 +42,7 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
           'Müşteri: Platform’da iş ilanı veren Kullanıcı.',
           'Görevli: Platform’daki ilanları görüp kabul ederek hizmeti bizzat ve bağımsız olarak veren Kullanıcı.',
           'İlan / Görev: Müşterinin Platform’da yayımladığı, yapılmasını istediği işe ilişkin içerik.',
-          'Hizmet: Görevlinin Müşteriye verdiği, ilanda tarif edilen iş. Hizmet, Platform İşleteni tarafından verilmez.',
+          'Hizmet: Görevlinin Müşteriye verdiği, ilanda tarif edilen iş ya da katılım (ör. bir maça oyuncu olarak, bir oyuna dördüncü kişi olarak katılma). Hizmet, Platform İşleteni tarafından verilmez.',
           'Hizmet Sözleşmesi: Görevlinin ilanı kabul etmesiyle Müşteri ile Görevli arasında doğrudan kurulan sözleşme.',
         ],
       },
@@ -58,10 +58,18 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
       {
         h: '3. Üyelik ve doğrulama',
         p: [
-          'Platform’u yalnızca 18 yaşını doldurmuş, ayırt etme gücüne sahip gerçek kişiler kullanabilir. Her kişi tek hesap açabilir.',
+          'Platform’u yalnızca 18 yaşını doldurmuş, ayırt etme gücüne sahip gerçek kişiler kullanabilir. Her kişi tek hesap açabilir. Üyelik için ad, soyad, doğum tarihi, doğrulanmış telefon numarası, doğrulanmış e-posta adresi ve adres bilgisi zorunludur.',
           'Kullanıcı verdiği bilgilerin doğru, güncel ve kendisine ait olduğunu kabul eder. Telefon numarası doğrulaması zorunludur.',
           'Platform İşleteni Görevliler için telefon ve kimlik kontrolü gibi sınırlı doğrulama adımları uygulayabilir. Bu adımlar; Kullanıcının kimliğinin, geçmişinin, sabıka durumunun, mesleki yeterliliğinin, dürüstlüğünün ya da güvenilirliğinin garanti edildiği anlamına gelmez. Platform İşleteni hiçbir Kullanıcı için “güvenli”, “güvenilir” veya “sorunsuz” olduğu yönünde taahhütte bulunmaz.',
           'Kullanıcı, hesabının ve cihazının güvenliğinden, doğrulama kodlarını ve görev kodlarını (PIN) üçüncü kişilerle paylaşmamaktan sorumludur.',
+        ],
+      },
+      {
+        h: '3A. Sosyal buluşmalar',
+        p: [
+          'Halısaha, okey, oyun ve spor partneri gibi sosyal ilanlarda Platform yalnızca kişilerin birbirini bulmasına aracılık eder; buluşmanın düzenleyicisi, organizatörü veya sorumlusu değildir.',
+          'Sosyal buluşmalar halka açık yerlerde yapılmalıdır. Spor ve fiziksel etkinliklere katılan Kullanıcı, kendi sağlık durumunun etkinliğe uygun olduğunu ve etkinliğin olağan risklerini bildiğini kabul eder; bu risklerden doğan zararlar Platform İşletenine yöneltilemez.',
+          'Sosyal ilanlarda ücret zorunlu değildir; ücret, saha veya masa bedeli gibi konular katılımcılar arasında belirlenir.',
         ],
       },
       {
@@ -70,6 +78,16 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
           'İlanın içeriği, doğruluğu, işin yasallığı ve ilanda belirtilen bilgilerin eksiksizliği Müşterinin sorumluluğundadır.',
           'Şu işler ilan edilemez ve kabul edilemez: hukuka aykırı her türlü iş; silah, uyuşturucu, alkol, tütün, reçeteli ilaç taşıma veya teslimi; yetki belgesi, ustalık belgesi veya ehliyet gerektiren işler (elektrik ve doğalgaz tesisatı, araç kullanımı vb.); yüksekte çalışma, iskele, çatı ve tehlikeli kimyasal içeren işler; çocuk, yaşlı, hasta veya hayvan bakımı; cinsel içerikli veya kişisel mahremiyeti ihlal eden talepler; para, değerli eşya veya belge taşıma.',
           'Platform İşleteni, bu sözleşmeye veya mevzuata aykırı gördüğü ilanları önceden bildirmeksizin kaldırabilir, ilgili hesapları askıya alabilir.',
+          'İlanlara telefon numarası, e-posta, IBAN, sosyal medya hesabı veya benzeri iletişim bilgisi yazılamaz; Platform bu tür ilanları kabul etmez.',
+        ],
+      },
+      {
+        h: '4A. İşlerin Platform üzerinden yürütülmesi',
+        p: [
+          'Kullanıcılar, Platform aracılığıyla tanıştıkları kişilerle, tanışmadan itibaren 12 ay boyunca aynı veya benzer işleri Platform dışına taşımamayı, iletişim bilgisi talep etmemeyi ve vermemeyi kabul eder. Aynı kişiyle yeniden çalışmak isteyen Müşteri, uygulamadaki “tekrar çağır” özelliğini kullanabilir.',
+          'Görev kodu (PIN), değerlendirme, destek ve güvenlik araçları yalnızca Platform üzerinden yürütülen işler için geçerlidir. Platform dışında yapılan anlaşmalar ve buluşmalar bakımından Platform İşleteninin hiçbir sorumluluğu ve destek yükümlülüğü yoktur.',
+          'Bu yükümlülüğe aykırılık, hesabın askıya alınması veya kapatılması sebebidir.',
+          'Görevli kanıt fotoğrafını yükledikten sonra Müşteri 24 saat içinde onaylamaz veya itiraz etmezse iş tamamlanmış sayılır.',
         ],
       },
       {
@@ -173,9 +191,15 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
         ],
       },
       {
+        h: '4A. Platform dışına taşımama',
+        p: [
+          'Görevli, Platform aracılığıyla tanıştığı Müşterilerle 12 ay boyunca işi Platform dışına taşımaz, iletişim bilgisi istemez veya vermez, Müşteriyi doğrudan çalışmaya yönlendirmez. Aykırılık hesabın kapatılması sebebidir.',
+        ],
+      },
+      {
         h: '5. Doğrulama, puanlama ve hesap',
         p: [
-          'Görevli hesabı, Platform İşleteninin yapacağı telefon ve kimlik kontrolünden sonra açılır. Görevli, adli sicil kaydına ilişkin talep edilen beyanların doğru olduğunu kabul eder.',
+          'Görevli hesabı; T.C. kimlik numarası, kimlik belgesinin ön yüzü ve yüz fotoğrafının ekip tarafından incelenmesi ile telefon ve e-posta doğrulamasından sonra açılır. Görevli, kasıtlı bir suçtan kesinleşmiş mahkûmiyeti bulunmadığına ilişkin beyanının doğru olduğunu, aksi halde doğacak zararlardan sorumlu olacağını kabul eder.',
           'Müşteri değerlendirmeleri, şikayetler ve güvenlik bildirimleri dikkate alınarak hesap askıya alınabilir veya kapatılabilir.',
         ],
       },
@@ -203,8 +227,8 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
       {
         h: '1. İşlenen kişisel veriler',
         p: [
-          'Kimlik: ad, soyad; Görevliler için kimlik doğrulama bilgileri.',
-          'İletişim: telefon numarası; Apple veya Google ile girişte e-posta adresi.',
+          'Kimlik: ad, soyad, doğum tarihi; Görevliler için T.C. kimlik numarası, kimlik belgesi ön yüz fotoğrafı, yüz fotoğrafı ve adli sicile ilişkin beyan.',
+          'İletişim: doğrulanmış telefon numarası ve e-posta adresi, ev adresi.',
           'Konum: ilan için seçilen yaklaşık ve açık adres; Görevlilerin çevrimiçi oldukları ve iş sırasında paylaştıkları konum; varış anındaki konum kaydı.',
           'Görsel: iş öncesi/sonrası ve olay fotoğrafları (fotoğraflardaki konum üst verisi yüklenirken silinir).',
           'Müşteri işlem: ilanlar, fiyatlar, görev durumları, değerlendirmeler.',
@@ -215,7 +239,8 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
       {
         h: '2. Amaçlar ve hukuki sebepler',
         p: [
-          'Üyelik, ilanın yayımlanması, Görevli ile eşleştirme, görev kodu ve adres yönetimi: sözleşmenin kurulması ve ifası (KVKK m.5/2-c).',
+          'Üyelik, yaş (18+) kontrolü, ilanın yayımlanması, Görevli ile eşleştirme, görev kodu ve adres yönetimi: sözleşmenin kurulması ve ifası (KVKK m.5/2-c).',
+          'Görevli başvurusunda kimliğin doğrulanması: bir hakkın tesisi ve korunması ile meşru menfaat (m.5/2-e, f); kimlik ve yüz fotoğraflarının incelenmesi bakımından ayrıca açık rızan (m.5/1). Yüz fotoğrafları otomatik biyometrik eşleştirmede kullanılmaz, yalnızca ekip tarafından gözle incelenir.',
           '5651 ve 6563 sayılı Kanunlar ile diğer mevzuattan doğan kayıt saklama ve yetkili mercilere bilgi verme: hukuki yükümlülük (m.5/2-ç).',
           'Güvenlik bildirimlerinin değerlendirilmesi, dolandırıcılığın ve kötüye kullanımın önlenmesi, uyuşmazlıklarda delil: bir hakkın tesisi, kullanılması veya korunması (m.5/2-e) ve meşru menfaat (m.5/2-f).',
           'Kampanya ve duyuru iletileri: yalnızca açık rızan (m.5/1) ile; dilediğin zaman geri alabilirsin.',
@@ -235,6 +260,7 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
           'Hesap bilgileri hesap açık olduğu sürece; hesap silindiğinde ad, telefon ve bildirim bilgileri silinir.',
           'Görev, olay ve güvenlik kayıtları; olası uyuşmazlıklar ve yasal yükümlülükler için anonimleştirilerek 10 yıla kadar; trafik kayıtları 5651 sayılı Kanun’da öngörülen süre boyunca saklanır.',
           'Görev kodu (PIN) şifreli olarak saklanır ve iş bittiğinde silinir.',
+          'Kimlik ve yüz fotoğrafları başvuru incelemesi süresince ve hesap açık olduğu sürece saklanır; hesap silindiğinde silinir.',
         ],
       },
       {
@@ -252,6 +278,12 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
     title: 'Açık Rıza Metni',
     intro: 'Bu metin yalnızca isteğe bağlı işlemler içindir. Rıza vermemen uygulamayı kullanmana engel olmaz.',
     sections: [
+      {
+        h: 'Görevli kimlik doğrulaması',
+        p: [
+          'Görevli başvurum kapsamında kimlik belgemin ön yüz fotoğrafının ve yüz fotoğrafımın, kimliğimin doğrulanması amacıyla Platform İşleteninin yetkili ekibi tarafından incelenmesine ve başvuru süresince ve hesabım açık kaldığı sürece saklanmasına açık rıza veriyorum. Fotoğraflar otomatik biyometrik eşleştirmede kullanılmaz. Rızamı geri alırsam görevli hesabım kapatılır.',
+        ],
+      },
       {
         h: 'Kampanya ve duyuru iletileri',
         p: [
@@ -302,6 +334,21 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
           'Açık adres sana yalnızca kabulden sonra gösterilir; kaydetme, paylaşma.',
           'Kodu almadan işe başlama. Anlatılandan farklı veya tehlikeli bir işle karşılaşırsan “Görevi bırak” de; güvenlik gerekçesiyle bırakmak cezasızdır.',
           'Yetkin olmadığın işi (elektrik, gaz, yüksekte çalışma) kabul etme.',
+        ],
+      },
+      {
+        h: 'Sosyal buluşmalar (halısaha, okey, oyun, spor)',
+        p: [
+          'Buluşmaları halka açık yerlerde yap: halısaha, kafe, kahvehane, spor salonu. Eve davet içeren sosyal ilan açma.',
+          'Alkol veya kumar içeren buluşma ilanı açılamaz.',
+          'Fiziksel etkinliklere sağlığın elveriyorsa katıl; sakatlanma gibi riskler katılana aittir.',
+          'Buluşmaya gelemeyeceksen ilanı hemen iptal et; sık iptal hesabının kısıtlanmasına yol açar.',
+        ],
+      },
+      {
+        h: 'Uygulama içinde kal',
+        p: [
+          'İlana ve mesajlara telefon, e-posta, IBAN veya sosyal medya hesabı yazma. Aynı kişiyle yeniden çalışmak istersen “tekrar çağır”ı kullan; güvenlik araçları, değerlendirme ve destek ancak böyle çalışır.',
         ],
       },
       {

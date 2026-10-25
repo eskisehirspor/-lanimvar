@@ -252,6 +252,24 @@ begin
   limit least(greatest(p_limit, 1), 500);
 end $$;
 
+-- Admins can file a category under a section and set how many people one listing may ask for.
+drop function if exists public.admin_upsert_pricing_rule(text, text, integer, integer, integer, boolean);
+create or replace function public.admin_upsert_pricing_rule(p_category text, p_label text, p_recommended integer, p_min integer, p_max integer, p_active boolean,
+                                                             p_section text default 'daily', p_max_people integer default 1)
+returns public.pricing_rules
+language plpgsql security definer set search_path = public as $$
+declare v public.pricing_rules;
+begin
+  perform public._require_admin();
+  insert into public.pricing_rules (category, label, recommended_price, min_price, max_price, active, section, max_people)
+  values (p_category, p_label, p_recommended, p_min, p_max, p_active, p_section, p_max_people)
+  on conflict (category) do update set label = excluded.label, recommended_price = excluded.recommended_price,
+    min_price = excluded.min_price, max_price = excluded.max_price, active = excluded.active, section = excluded.section, max_people = excluded.max_people
+  returning * into v;
+  perform public._audit('pricing_rule_saved', 'pricing_rule', p_category, to_jsonb(v));
+  return v;
+end $$;
+
 -- ─── Grants (new signatures) ────────────────────────────────────────────────
 revoke execute on all functions in schema public from public, anon, authenticated;
 grant execute on function
@@ -296,7 +314,7 @@ grant execute on function
   public.admin_update_dispute(uuid, public.dispute_status, text),
   public.admin_settle_task(uuid, public.task_status, text),
   public.admin_task_address(uuid, text),
-  public.admin_upsert_pricing_rule(text, text, integer, integer, integer, boolean),
+  public.admin_upsert_pricing_rule(text, text, integer, integer, integer, boolean, text, integer),
   public.admin_people(text, public.app_role, integer),
   public.admin_metrics(integer)
 to authenticated;

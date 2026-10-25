@@ -4,7 +4,7 @@ import Svg, { Circle, Defs, Ellipse, G, LinearGradient, Path, RadialGradient, Re
 import type { ClayName } from '@/brand/clay';
 import { useTheme } from '@/theme';
 
-export type ClayObjectName = 'couch' | 'boxes' | 'drill' | 'bag' | 'spray' | 'key';
+export type ClayObjectName = 'couch' | 'boxes' | 'drill' | 'bag' | 'spray' | 'key' | 'ball' | 'tiles' | 'paw' | 'hourglass' | 'laptop' | 'plant' | 'camera' | 'balloon';
 
 /**
  * Soft 3D "clay" objects: lit from the top-left, a turned face in shadow and a
@@ -119,6 +119,99 @@ export function ClayObject({ name, size = 120 }: { name: ClayObjectName; size?: 
         <Rect x={62} y={46} width={44} height={12} rx={5} fill={d('sun')} />
         <Rect x={86} y={56} width={8} height={12} rx={2} fill={m.sun.lo} />
         <Rect x={98} y={56} width={8} height={16} rx={2} fill={m.sun.lo} />
+      </G>
+    ),
+    ball: (
+      <G>
+        {shadow}
+        <Circle cx={60} cy={60} r={40} fill={v('cream')} />
+        <Path d="M60 42 L75 53 L69 71 L51 71 L45 53 Z" fill={v('ink')} />
+        <Path d="M60 20 L60 42 M75 53 L97 46 M69 71 L82 92 M51 71 L38 92 M45 53 L23 46" stroke={m.ink.base} strokeWidth={3} strokeLinecap="round" />
+        <Path d="M38 26 L44 34 L36 42 L26 38 Z" fill={m.ink.lo} opacity={0.85} />
+        <Path d="M82 26 L94 38 L84 42 L76 34 Z" fill={m.ink.lo} opacity={0.85} />
+        <Circle cx={46} cy={40} r={8} fill={m.cream.hi} opacity={0.6} />
+      </G>
+    ),
+    tiles: (
+      <G>
+        {shadow}
+        <G transform="rotate(-12 44 64)">
+          <Rect x={24} y={34} width={36} height={52} rx={6} fill={d('cream')} />
+          <Rect x={26} y={34} width={32} height={48} rx={5} fill={v('cream')} />
+          <Path d="M42 46 C36 50 36 60 42 64 C38 58 38 52 42 46 Z" fill={m.brick.base} />
+          <Circle cx={42} cy={70} r={4} fill={m.brick.base} />
+        </G>
+        <G transform="rotate(10 78 62)">
+          <Rect x={60} y={32} width={36} height={52} rx={6} fill={d('cream')} />
+          <Rect x={62} y={32} width={32} height={48} rx={5} fill={v('cream')} />
+          <Path d="M78 44 L82 54 L78 64 L74 54 Z" fill={m.sky.lo} />
+          <Circle cx={78} cy={70} r={4} fill={m.ink.base} />
+        </G>
+      </G>
+    ),
+    paw: (
+      <G>
+        {shadow}
+        <Ellipse cx={60} cy={72} rx={24} ry={20} fill={v('wood')} />
+        <Ellipse cx={34} cy={46} rx={9} ry={12} fill={v('wood')} transform="rotate(-20 34 46)" />
+        <Ellipse cx={50} cy={34} rx={9} ry={12} fill={v('wood')} />
+        <Ellipse cx={70} cy={34} rx={9} ry={12} fill={v('wood')} />
+        <Ellipse cx={86} cy={46} rx={9} ry={12} fill={v('wood')} transform="rotate(20 86 46)" />
+        <Ellipse cx={52} cy={64} rx={8} ry={5} fill={m.wood.hi} opacity={0.7} />
+      </G>
+    ),
+    hourglass: (
+      <G>
+        {shadow}
+        <Rect x={30} y={18} width={60} height={10} rx={5} fill={v('wood')} />
+        <Rect x={30} y={92} width={60} height={10} rx={5} fill={d('wood')} />
+        <Path d="M38 28 L82 28 C82 46 66 54 64 60 C66 66 82 74 82 92 L38 92 C38 74 54 66 56 60 C54 54 38 46 38 28 Z" fill={m.sky.hi} opacity={0.75} />
+        <Path d="M46 36 L74 36 C72 46 62 52 60 56 C58 52 48 46 46 36 Z" fill={m.sun.base} />
+        <Path d="M60 64 L60 76 M44 90 C50 80 70 80 76 90 Z" stroke={m.sun.lo} strokeWidth={2.5} fill={m.sun.base} />
+        <Rect x={41} y={30} width={4} height={24} rx={2} fill={m.cream.hi} opacity={0.8} />
+      </G>
+    ),
+    laptop: (
+      <G>
+        {shadow}
+        <Rect x={26} y={30} width={68} height={46} rx={6} fill={v('ink')} />
+        <Rect x={31} y={35} width={58} height={36} rx={3} fill={v('sky')} />
+        <Path d="M36 60 L48 48 L58 56 L70 44 L84 58" stroke={m.cream.hi} strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <Path d="M16 78 L104 78 L98 92 L22 92 Z" fill={v('steel')} />
+        <Rect x={50} y={80} width={20} height={4} rx={2} fill={m.steel.lo} />
+      </G>
+    ),
+    plant: (
+      <G>
+        {shadow}
+        <Ellipse cx={46} cy={44} rx={12} ry={24} fill={v('leaf')} transform="rotate(-24 46 44)" />
+        <Ellipse cx={74} cy={44} rx={12} ry={24} fill={d('leaf')} transform="rotate(24 74 44)" />
+        <Ellipse cx={60} cy={36} rx={10} ry={22} fill={v('leaf')} />
+        <Path d="M36 66 L84 66 L78 104 L42 104 Z" fill={v('brick')} />
+        <Rect x={32} y={62} width={56} height={10} rx={4} fill={d('brick')} />
+        <Rect x={40} y={74} width={5} height={24} rx={2.5} fill={m.brick.hi} opacity={0.7} />
+      </G>
+    ),
+    camera: (
+      <G>
+        {shadow}
+        <Rect x={44} y={28} width={28} height={12} rx={4} fill={d('ink')} />
+        <Rect x={20} y={36} width={80} height={58} rx={14} fill={v('ink')} />
+        <Circle cx={60} cy={65} r={22} fill={v('steel')} />
+        <Circle cx={60} cy={65} r={14} fill={v('sky')} />
+        <Circle cx={55} cy={60} r={4} fill={m.cream.hi} />
+        <Circle cx={88} cy={48} r={4} fill={m.sun.base} />
+      </G>
+    ),
+    balloon: (
+      <G>
+        {shadow}
+        <Path d="M44 78 C40 88 52 92 46 104" stroke={m.ink.lo} strokeWidth={1.5} fill="none" />
+        <Path d="M74 80 C78 90 66 94 72 104" stroke={m.ink.lo} strokeWidth={1.5} fill="none" />
+        <Ellipse cx={44} cy={48} rx={22} ry={28} fill={v('brick')} />
+        <Ellipse cx={76} cy={52} rx={20} ry={26} fill={v('sun')} />
+        <Ellipse cx={36} cy={38} rx={5} ry={8} fill={m.brick.hi} opacity={0.8} />
+        <Ellipse cx={69} cy={42} rx={4} ry={7} fill={m.sun.hi} opacity={0.9} />
       </G>
     ),
   };

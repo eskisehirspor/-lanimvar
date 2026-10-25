@@ -10,7 +10,7 @@ import { Icon, type IconName } from './Icon';
 import { riseIn } from './motion';
 import { Text } from './Text';
 
-export interface FieldProps extends Pick<TextInputProps, 'value' | 'onChangeText' | 'placeholder' | 'keyboardType' | 'autoFocus' | 'maxLength'> {
+export interface FieldProps extends Pick<TextInputProps, 'value' | 'onChangeText' | 'placeholder' | 'keyboardType' | 'autoFocus' | 'maxLength' | 'autoCapitalize' | 'autoComplete' | 'textContentType' | 'secureTextEntry'> {
   label?: string;
   optional?: boolean;
   multiline?: boolean;

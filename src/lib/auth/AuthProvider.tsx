@@ -1,14 +1,14 @@
 import { useEffect, type ReactNode } from 'react';
 
 import { db } from '@/lib/api/client';
-import type { Profile } from '@/lib/api/types';
+import { profileColumns, type Profile } from '@/lib/api/types';
 import { queryClient } from '@/lib/query/queryClient';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 
 import { statusFor, useAuth } from './store';
 
 export async function loadProfile(userId: string): Promise<Profile | null> {
-  const { data } = await db().from('profiles').select('id, role, full_name, phone, onboarded_at, is_banned, deleted_at, legal_version').eq('id', userId).maybeSingle();
+  const { data } = await db().from('profiles').select(profileColumns).eq('id', userId).maybeSingle();
   return (data as Profile | null) ?? null;
 }
 

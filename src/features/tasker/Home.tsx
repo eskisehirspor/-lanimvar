@@ -154,14 +154,27 @@ function OfferCard({ offer }: { offer: Offer }) {
       </View>
       <View style={styles.row}>
         <View style={{ flex: 1, gap: 6 }}>
+          {offer.rehire ? (
+            <View style={[styles.badge, { backgroundColor: c.brand.fill }]}>
+              <Text variant="micro" tone="onFill">
+                {t('task.rehireBadge')}
+              </Text>
+            </View>
+          ) : null}
           <Text variant="numeric.hero" tone="onInverse">
-            {formatTL(offer.price)}
+            {offer.price === 0 ? t('task.free') : formatTL(offer.price)}
           </Text>
           <Text variant="title" tone="onInverse">
             {offer.title}
           </Text>
           <Text variant="meta" tone="onInverseSecondary">
-            {[offer.approx_label, offer.distance_m != null ? formatKm(offer.distance_m / 1000) : null].filter(Boolean).join(' · ')}
+            {[
+              offer.approx_label,
+              offer.distance_m != null ? formatKm(offer.distance_m / 1000) : null,
+              offer.scheduled_for ? t('task.startsAt', { time: new Date(offer.scheduled_for).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) }) : t('task.now'),
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </Text>
           <Text variant="meta" tone="onInverseTertiary">
             {t('tasker.offerFrom', { name: offer.customer_first_name, count: offer.customer_tasks })}
@@ -200,4 +213,5 @@ const styles = StyleSheet.create({
   bar: { height: 4, borderRadius: 2, overflow: 'hidden' },
   barFill: { height: 4, borderRadius: 2 },
   empty: { alignItems: 'center', gap: 8, paddingVertical: 30 },
+  badge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
 });

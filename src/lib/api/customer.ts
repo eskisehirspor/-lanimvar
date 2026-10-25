@@ -22,7 +22,7 @@ export function usePricing() {
     queryKey: keys.pricing,
     staleTime: 10 * 60_000,
     queryFn: async () => {
-      const { data, error } = await db().from('pricing_rules').select('*').eq('active', true).order('label');
+      const { data, error } = await db().from('pricing_rules').select('*').eq('active', true).order('sort');
       if (error) throw toAppError(error);
       return data as PricingRule[];
     },
@@ -113,6 +113,8 @@ export interface NewTask {
   lng: number;
   exactAddress: string;
   exactDetails: string;
+  scheduledFor?: string | null;
+  preferredTasker?: string | null;
 }
 
 export async function createTask(t: NewTask): Promise<string> {
@@ -126,6 +128,8 @@ export async function createTask(t: NewTask): Promise<string> {
     p_lng: t.lng,
     p_exact_address: t.exactAddress,
     p_exact_details: t.exactDetails,
+    p_scheduled_for: t.scheduledFor ?? null,
+    p_preferred_tasker: t.preferredTasker ?? null,
   });
   queryClient.invalidateQueries({ queryKey: keys.myTasks });
   return id;

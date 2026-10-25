@@ -36,28 +36,47 @@ export function samplePhoto(kind: 'before' | 'after') {
 
 function seed(): Tables {
   const people: Row[] = [
-    { id: ids.customer, role: 'customer', full_name: 'Ayşe Kaya', phone: '905550000001', onboarded_at: ago(9000), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(9000) },
-    { id: ids.tasker, role: 'tasker', full_name: 'Mehmet Koç', phone: '905550000002', onboarded_at: ago(8000), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(8000) },
-    { id: ids.admin, role: 'admin', full_name: 'Destek Ekibi', phone: '905550000003', onboarded_at: ago(10000), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(10000) },
+    { id: ids.customer, role: 'customer', full_name: 'Ayşe Kaya', phone: '905550000001', onboarded_at: ago(9000), is_banned: false, deleted_at: null, legal_version: '2026-10-26', created_at: ago(9000), first_name: 'Ayşe', last_name: 'Kaya', email: 'ayse@example.com', phone_verified_at: ago(9000), email_verified_at: ago(9000), birth_date: '1994-03-12', home_district: 'Tepebaşı', home_neighbourhood: 'Hoşnudiye', home_address: 'Ahmet Kanatlı Cad. No: 24', home_details: 'Kat 3 Daire 7', home_lat: 39.7767, home_lng: 30.5206 },
+    { id: ids.tasker, role: 'tasker', full_name: 'Mehmet Koç', phone: '905550000002', onboarded_at: ago(8000), is_banned: false, deleted_at: null, legal_version: '2026-10-26', created_at: ago(8000), first_name: 'Mehmet', last_name: 'Koç', email: 'mehmet@example.com', phone_verified_at: ago(8000), email_verified_at: ago(8000), birth_date: '1997-08-02', home_district: 'Odunpazarı', home_address: 'Vişnelik Mah. 12. Sok. No: 4' },
+    { id: ids.admin, role: 'admin', full_name: 'Destek Ekibi', phone: '905550000003', onboarded_at: ago(10000), is_banned: false, deleted_at: null, legal_version: '2026-10-26', created_at: ago(10000), email: 'destek@example.com', phone_verified_at: ago(10000), email_verified_at: ago(10000) },
     { id: ids.simTasker, role: 'tasker', full_name: 'Emre Yıldız', phone: '905550000010', onboarded_at: ago(7000), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(7000) },
     { id: ids.simCustomer, role: 'customer', full_name: 'Zeynep Arslan', phone: '905550000011', onboarded_at: ago(6000), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(6000) },
     { id: 'demo-p1', role: 'tasker', full_name: 'Selin Ak', phone: '905550000012', onboarded_at: ago(300), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(300) },
     { id: 'demo-p2', role: 'tasker', full_name: 'Burak Demir', phone: '905550000013', onboarded_at: ago(200), is_banned: false, deleted_at: null, legal_version: '2026-10-25', created_at: ago(200) },
   ];
   const tasker_profiles: Row[] = [
-    { id: ids.tasker, user_id: ids.tasker, verification: 'approved', is_online: false, rating_avg: 4.9, rating_count: 28, completed_count: 31, last_lat: 39.78, last_lng: 30.515 },
+    { id: ids.tasker, user_id: ids.tasker, verification: 'approved', is_online: false, rating_avg: 4.9, rating_count: 28, completed_count: 31, last_lat: 39.78, last_lng: 30.515, categories: [], national_id: '10000000146', has_vehicle: true, application_submitted_at: ago(8000) },
     { id: ids.simTasker, user_id: ids.simTasker, verification: 'approved', is_online: true, rating_avg: 4.8, rating_count: 54, completed_count: 61, last_lat: 39.785, last_lng: 30.505 },
-    { id: 'demo-p1', user_id: 'demo-p1', verification: 'pending', is_online: false, rating_avg: 0, rating_count: 0, completed_count: 0 },
+    { id: 'demo-p1', user_id: 'demo-p1', verification: 'pending', is_online: false, rating_avg: 0, rating_count: 0, completed_count: 0, categories: ['football', 'okey', 'heavy'], national_id: '11111111110', has_vehicle: false, application_submitted_at: ago(280), id_front_path: 'demo-p1/id-front.jpg', selfie_path: 'demo-p1/selfie.jpg' },
     { id: 'demo-p2', user_id: 'demo-p2', verification: 'pending', is_online: false, rating_avg: 0, rating_count: 0, completed_count: 0 },
   ];
-  const pricing_rules: Row[] = [
-    ['heavy', 'Ağır eşya', 650, 300, 3000],
-    ['moving', 'Taşıma', 900, 400, 6000],
-    ['assembly', 'Montaj', 450, 200, 2500],
-    ['shopping', 'Alışveriş', 250, 150, 1500],
-    ['cleaning', 'Temizlik', 700, 300, 4000],
-    ['repair', 'Küçük tamir', 400, 200, 2500],
-  ].map(([category, label, rec, min, max]) => ({ id: `rule-${category}`, category, label, recommended_price: rec, min_price: min, max_price: max, active: true }));
+  const pricing_rules: Row[] = (
+    [
+      ['heavy', 'Ağır eşya', 'daily', 650, 300, 3000, 1],
+      ['moving', 'Taşıma', 'daily', 900, 400, 6000, 1],
+      ['assembly', 'Montaj', 'daily', 450, 200, 2500, 1],
+      ['repair', 'Küçük tamir', 'daily', 400, 200, 2500, 1],
+      ['shopping', 'Alışveriş', 'daily', 250, 150, 1500, 1],
+      ['cleaning', 'Temizlik', 'daily', 700, 300, 4000, 1],
+      ['football', 'Halısahaya oyuncu', 'social', 0, 0, 300, 4],
+      ['okey', 'Okeye 4. kişi', 'social', 0, 0, 200, 3],
+      ['games', 'King, Batak, Play arkadaşı', 'social', 0, 0, 200, 3],
+      ['sport', 'Spor partneri', 'social', 0, 0, 300, 2],
+      ['queue', 'Sırada bekleme', 'wait', 300, 150, 1500, 1],
+      ['athome', 'Evde servis bekleme', 'wait', 250, 150, 1500, 1],
+      ['parcel', 'Kargo götür, teslim al', 'wait', 150, 80, 600, 1],
+      ['dogwalk', 'Köpek gezdirme', 'pets', 150, 80, 500, 1],
+      ['petsit', 'Evcil hayvan besleme', 'pets', 200, 100, 800, 1],
+      ['plants', 'Bitki sulama', 'pets', 120, 60, 400, 1],
+      ['snow', 'Kar küreme', 'pets', 300, 150, 1500, 1],
+      ['garden', 'Bahçe işleri', 'pets', 400, 200, 2500, 1],
+      ['carwash', 'Araç yıkama', 'pets', 300, 150, 1000, 1],
+      ['tech', 'Telefon, bilgisayar kurulumu', 'extra', 300, 150, 1500, 1],
+      ['event', 'Etkinlik hazırlığı', 'extra', 500, 200, 3000, 1],
+      ['photo', 'Fotoğraf çekimi', 'extra', 500, 200, 3000, 1],
+      ['tutor', 'Ders çalışma, özel ders', 'extra', 300, 150, 1500, 1],
+    ] as const
+  ).map(([category, label, section, rec, min, max, people], i) => ({ id: `rule-${category}`, category, label, section, sort: i, recommended_price: rec, min_price: min, max_price: max, max_people: people, active: true }));
 
   // A week of history so the admin dashboard has something to say.
   const titles = ['Koltuk indirme', 'Dolap montajı', 'Market alışverişi', 'Ev temizliği', 'Koli taşıma', 'Raf takma', 'Çamaşır makinesi taşıma'];
@@ -112,6 +131,12 @@ function emit(table: string, row: Row) {
 
 // ─── Session ──────────────────────────────────────────────────────────────────
 export const session: { userId: string | null } = { userId: null };
+/** What "auth" has verified for each demo user (mirrors auth.users phone/email confirmation). */
+export const verified = new Map<string, { phone: string | null; email: string | null }>([
+  [ids.customer, { phone: '905550000001', email: 'ayse@example.com' }],
+  [ids.tasker, { phone: '905550000002', email: 'mehmet@example.com' }],
+  [ids.admin, { phone: '905550000003', email: 'destek@example.com' }],
+]);
 export function userForPhone(phone: string) {
   const known = phones[phone];
   if (known) return known;
@@ -119,8 +144,9 @@ export function userForPhone(phone: string) {
   if (existing) return existing.id as string;
   return newUser({ phone });
 }
-export function newUser(meta: { phone?: string; full_name?: string }) {
+export function newUser(meta: { phone?: string; full_name?: string; email?: string }) {
   const id = uid('user');
+  verified.set(id, { phone: meta.phone ?? null, email: meta.email ?? null });
   db.profiles!.push({ id, role: 'customer', full_name: meta.full_name ?? null, phone: meta.phone ?? null, onboarded_at: null, is_banned: false, deleted_at: null, legal_version: null, created_at: now() });
   return id;
 }
@@ -221,12 +247,14 @@ const simJobs = [
   { title: 'Buzdolabını 2. kata çıkarma', category: 'heavy', price: 700, label: 'Bahçelievler, Eskişehir', desc: 'Asansör yok. İki kişi gerekebilir ama tek kişi de olur, el arabası var.' },
   { title: 'IKEA dolap montajı', category: 'assembly', price: 500, label: 'Vişnelik, Eskişehir', desc: '3 kapaklı gardırop, kutusu açılmadı.' },
   { title: 'Haftalık market alışverişi', category: 'shopping', price: 250, label: 'Hoşnudiye, Eskişehir', desc: 'Liste hazır, yaklaşık 12 kalem.' },
+  { title: 'Bu akşam okeye 4. kişi', category: 'okey', price: 0, label: 'Bahçelievler, Eskişehir', desc: 'Saat 21:00, çay bizden. Mahalle kahvesi, sakin ortam.' },
+  { title: 'Halısahaya 1 kişi eksik', category: 'football', price: 0, label: 'Vişnelik, Eskişehir', desc: '7v7, saha parası bizden. Kaleci de olur.' },
 ];
 let simJobIndex = 0;
-function offerSimJob() {
-  const me = tp(ids.tasker);
+function offerSimJob(target: string) {
+  const me = tp(target);
   if (!me?.is_online) return;
-  if (db.task_assignments!.some((a) => a.tasker_id === ids.tasker && a.status === 'active')) return;
+  if (db.task_assignments!.some((a) => a.tasker_id === target && a.status === 'active')) return;
   const j = simJobs[simJobIndex++ % simJobs.length]!;
   const id = uid('task');
   db.tasks!.push({
@@ -235,7 +263,7 @@ function offerSimJob() {
     exact_lat: DEST.lat, exact_lng: DEST.lng, searching_since: now(), first_accepted_at: null, arrived_at: null, started_at: null, completed_at: null, cancelled_at: null, created_at: now(),
   });
   log(id, 'created', {}, ids.simCustomer);
-  const d = { id: uid('d'), task_id: id, tasker_id: ids.tasker, status: 'offered', distance_m: 1300 + simJobIndex * 400, offered_at: now(), expires_at: new Date(Date.now() + 90_000).toISOString() };
+  const d = { id: uid('d'), task_id: id, tasker_id: target, status: 'offered', distance_m: 1300 + simJobIndex * 400, offered_at: now(), expires_at: new Date(Date.now() + 90_000).toISOString() };
   db.task_dispatches!.push(d);
   emit('task_dispatches', d);
 }
@@ -248,24 +276,47 @@ export const rpcs: Record<string, (a: Args) => unknown> = {
   is_admin: () => me().role === 'admin',
   complete_onboarding: (a) => {
     const p = db.profiles!.find((x) => x.id === session.userId) ?? fail('not_signed_in');
-    if (!a.p_accept_terms || !a.p_accept_kvkk || String(a.p_full_name ?? '').trim().length < 2) fail('invalid_input');
-    Object.assign(p!, { full_name: String(a.p_full_name).trim(), role: p!.role === 'admin' ? 'admin' : a.p_role, onboarded_at: now(), legal_version: a.p_legal_version });
-    // Demo: new Taskers are approved at once so the flow can be tried.
-    if (a.p_role === 'tasker' && !tp(p!.id)) db.tasker_profiles!.push({ id: p!.id, user_id: p!.id, verification: 'approved', is_online: false, rating_avg: 0, rating_count: 0, completed_count: 0 });
+    if (!a.p_accept_terms || !a.p_accept_kvkk || String(a.p_first_name ?? '').trim().length < 2 || String(a.p_last_name ?? '').trim().length < 2) fail('invalid_input');
+    const birth = Date.parse(String(a.p_birth_date ?? ''));
+    if (!birth || birth > Date.now() - 18 * 365.25 * 86400_000) fail('underage');
+    if (String(a.p_address ?? '').trim().length < 5) fail('invalid_input');
+    const v = verified.get(String(p!.id));
+    if (!v?.phone) fail('phone_unverified');
+    if (!v?.email) fail('email_unverified');
+    Object.assign(p!, {
+      first_name: a.p_first_name, last_name: a.p_last_name, full_name: `${String(a.p_first_name).trim()} ${String(a.p_last_name).trim()}`, birth_date: a.p_birth_date,
+      phone: v!.phone, email: v!.email, phone_verified_at: now(), email_verified_at: now(),
+      home_district: a.p_district, home_neighbourhood: a.p_neighbourhood || null, home_address: a.p_address, home_details: a.p_details || null, home_lat: a.p_lat, home_lng: a.p_lng,
+      role: p!.role === 'admin' ? 'admin' : a.p_role, onboarded_at: now(), legal_version: a.p_legal_version,
+    });
+    if (a.p_role === 'tasker' && !tp(p!.id)) db.tasker_profiles!.push({ id: p!.id, user_id: p!.id, verification: 'pending', is_online: false, rating_avg: 0, rating_count: 0, completed_count: 0, categories: [] });
     return p;
   },
+  submit_tasker_application: (a) => {
+    const p = me();
+    const prof = tp(p.id) ?? fail('not_allowed');
+    if (!/^[1-9]\d{10}$/.test(String(a.p_national_id))) fail('invalid_national_id');
+    // Demo: applications are approved at once so the Tasker flow can be tried right away.
+    Object.assign(prof!, { national_id: a.p_national_id, id_front_path: a.p_id_front_path, selfie_path: a.p_selfie_path, categories: a.p_categories, has_vehicle: a.p_has_vehicle, bio: a.p_bio, application_submitted_at: now(), verification: 'approved' });
+    return prof;
+  },
+  update_home_address: (a) => Object.assign(me(), { home_district: a.p_district, home_neighbourhood: a.p_neighbourhood || null, home_address: a.p_address, home_details: a.p_details || null, home_lat: a.p_lat, home_lng: a.p_lng }),
+  sync_verification: () => me(),
   update_profile: (a) => Object.assign(me(), a.p_full_name ? { full_name: a.p_full_name } : {}),
   create_task: (a) => {
     const p = me();
     const rule = db.pricing_rules!.find((r) => r.category === a.p_category) ?? fail('invalid_input');
     const price = Number(a.p_price);
     if (price < Number(rule!.min_price) || price > Number(rule!.max_price)) fail('invalid_input');
+    const contact = /(\+?9?0?[\s.-]*5\d{2}[\s.-]*\d{3}[\s.-]*\d{2}[\s.-]*\d{2})|([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})|(TR\s?\d{2}(\s?\d{4}){5})|(whatsapp|instagram|telegram|t\.me\/|@[a-z0-9_.]{3,})/i;
+    if ([a.p_title, a.p_description, a.p_exact_details].some((x) => contact.test(String(x ?? '')))) fail('contact_info_not_allowed');
     const id = uid('task');
     const t = {
       id, customer_id: p.id, category: a.p_category, title: a.p_title, description: a.p_description || null, price, status: 'searching',
       approx_label: a.p_approx_label, approx_lat: Math.round(Number(a.p_lat) * 1000) / 1000, approx_lng: Math.round(Number(a.p_lng) * 1000) / 1000,
       exact_address: a.p_exact_address, exact_details: a.p_exact_details || null, exact_lat: a.p_lat, exact_lng: a.p_lng, searching_since: now(),
       first_accepted_at: null, arrived_at: null, started_at: null, completed_at: null, cancelled_at: null, created_at: now(),
+      scheduled_for: a.p_scheduled_for ?? null, preferred_tasker_id: a.p_preferred_tasker ?? null,
     };
     db.tasks!.push(t);
     log(id, 'created', { price });
@@ -286,8 +337,9 @@ export const rpcs: Record<string, (a: Args) => unknown> = {
     const p = tp(me().id) ?? fail('not_allowed');
     Object.assign(p!, { is_online: !!a.p_online, last_lat: a.p_lat ?? p!.last_lat, last_lng: a.p_lng ?? p!.last_lng, last_seen_at: now() });
     if (a.p_online) {
-      later(3000, offerSimJob);
-      later(25000, () => !db.task_dispatches!.some((d) => d.tasker_id === ids.tasker && d.status === 'offered') && offerSimJob());
+      const target = String(me().id);
+      later(3000, () => offerSimJob(target));
+      later(25000, () => !db.task_dispatches!.some((d) => d.tasker_id === target && d.status === 'offered') && offerSimJob(target));
     }
     return p;
   },
@@ -299,7 +351,7 @@ export const rpcs: Record<string, (a: Args) => unknown> = {
       .map((d) => {
         const t = task(d.task_id);
         const c = db.profiles!.find((p) => p.id === t.customer_id);
-        return { task_id: t.id, title: t.title, description: t.description, category: t.category, price: t.price, approx_label: t.approx_label, approx_lat: t.approx_lat, approx_lng: t.approx_lng, distance_m: d.distance_m, expires_at: d.expires_at, customer_first_name: first(c?.full_name), customer_tasks: 7 };
+        return { task_id: t.id, title: t.title, description: t.description, category: t.category, price: t.price, approx_label: t.approx_label, approx_lat: t.approx_lat, approx_lng: t.approx_lng, distance_m: d.distance_m, expires_at: d.expires_at, customer_first_name: first(c?.full_name), customer_tasks: 7, scheduled_for: t.scheduled_for ?? null, rehire: false };
       })
       .filter((o) => task(o.task_id).status === 'searching');
   },
@@ -474,7 +526,7 @@ export const rpcs: Record<string, (a: Args) => unknown> = {
       .filter((p) => (!a.p_role || p.role === a.p_role) && (!q || String(p.full_name ?? '').toLocaleLowerCase('tr-TR').includes(q) || String(p.phone ?? '').includes(q)))
       .map((p) => {
         const x = tp(p.id);
-        return { ...p, verification: x?.verification ?? null, is_online: x?.is_online ?? null, rating_avg: x?.rating_avg ?? null, completed_count: x?.completed_count ?? null, open_reports: db.disputes!.filter((d) => d.subject_id === p.id && ['open', 'reviewing'].includes(String(d.status))).length };
+        return { ...p, phone_verified: !!p.phone_verified_at, email_verified: !!p.email_verified_at, verification: x?.verification ?? null, is_online: x?.is_online ?? null, rating_avg: x?.rating_avg ?? null, completed_count: x?.completed_count ?? null, national_id: x?.national_id ?? null, id_front_path: x?.id_front_path ?? null, selfie_path: x?.selfie_path ?? null, categories: x?.categories ?? null, has_vehicle: x?.has_vehicle ?? null, application_submitted_at: x?.application_submitted_at ?? null, late_cancels: p.id === ids.simCustomer ? 2 : 0, open_reports: db.disputes!.filter((d) => d.subject_id === p.id && ['open', 'reviewing'].includes(String(d.status))).length };
       });
   },
   admin_set_tasker_verification: (a) => {

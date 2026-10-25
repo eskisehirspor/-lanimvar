@@ -2,7 +2,7 @@
  * A supabase-js look-alike over the in-memory demo backend: just the surface the
  * app uses (auth, from().select…, rpc, channel, storage, functions).
  */
-import { db, DEMO_CODE, listen, mediaUrl, newUser, putMedia, rpcs, session, userForPhone, visible } from './backend';
+import { db, DEMO_CODE, listen, mediaUrl, newUser, putMedia, rpcs, session, userForPhone, verified, visible } from './backend';
 
 type AuthEvent = 'SIGNED_IN' | 'SIGNED_OUT' | 'TOKEN_REFRESHED';
 type Session = { user: { id: string }; access_token: string };
@@ -80,25 +80,33 @@ export function createDemoClient() {
         await wait(500);
         return { error: null };
       },
-      verifyOtp: async ({ phone, token }: { phone: string; token: string }) => {
+      verifyOtp: async ({ phone, email, token, type }: { phone?: string; email?: string; token: string; type: string }) => {
         await wait(400);
         if (token !== DEMO_CODE) return { error: { message: 'Token has expired or is invalid' } };
-        signIn(userForPhone(phone.replace('+', '')));
+        const me = session.userId ? verified.get(session.userId) : undefined;
+        if (type === 'phone_change' && me && phone) me.phone = phone.replace('+', '');
+        else if (type === 'email_change' && me && email) me.email = email;
+        else if (phone) signIn(userForPhone(phone.replace('+', '')));
         return { error: null };
       },
+      getUser: async () => {
+        const v = session.userId ? verified.get(session.userId) : undefined;
+        return ok({ user: session.userId ? { id: session.userId, phone: v?.phone ?? null, phone_confirmed_at: v?.phone ? 'now' : null, email: v?.email ?? null, email_confirmed_at: v?.email ? 'now' : null } : null });
+      },
       signInWithIdToken: async () => {
-        signIn(newUser({}));
+        signIn(newUser({ email: 'apple-kullanici@privaterelay.example' }));
         return { error: null };
       },
       signInWithOAuth: async () => {
         await wait(300);
-        signIn(newUser({}));
+        signIn(newUser({ email: 'google-kullanici@example.com' }));
         return { data: { url: null }, error: null };
       },
       exchangeCodeForSession: async () => ({ error: null }),
-      updateUser: async ({ data }: { data: { full_name?: string } }) => {
+      updateUser: async ({ data }: { data?: { full_name?: string }; phone?: string; email?: string }) => {
+        await wait(300);
         const p = db.profiles!.find((x) => x.id === session.userId);
-        if (p && data.full_name && !p.full_name) p.full_name = data.full_name;
+        if (p && data?.full_name && !p.full_name) p.full_name = data.full_name;
         return { error: null };
       },
       signOut: async () => {

@@ -17,6 +17,7 @@ import {
   Avatar,
   Button,
   Confetti,
+  CTA,
   FlipText,
   Grain,
   Icon,
@@ -133,7 +134,7 @@ function SearchingBody({ task, elapsed, top, bottom }: { task: Task; elapsed: st
             </Text>
           </MaskReveal>
           <Text variant="body" tone="secondary" style={{ marginTop: 10 }}>
-            {`${task.title} · ${formatTL(task.price)}`}
+            {`${task.title} · ${task.price === 0 ? t('task.free') : formatTL(task.price)}${task.scheduled_for ? ` · ${t('task.startsAt', { time: new Date(task.scheduled_for).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) })}` : ''}`}
           </Text>
         </View>
       </View>
@@ -280,6 +281,9 @@ function Proof({ task, tasker }: { task: Task; tasker: TaskTasker | null }) {
         <Text variant="body.l" tone="secondary">
           {t('customer.proofBody')}
         </Text>
+        <Text variant="meta" tone="tertiary">
+          {t('task.autoComplete')}
+        </Text>
         <View style={styles.photos}>
           {(media.data ?? [])
             .filter((m) => m.url)
@@ -318,7 +322,7 @@ function Done({ task, tasker }: { task: Task; tasker: TaskTasker | null }) {
         <MaskReveal delay={120}>
           <Text variant="display.hero" serif style={{ fontSize: 96, lineHeight: 98 }}>{`${t('customer.doneA')}.`}</Text>
         </MaskReveal>
-        <Text variant="body.l" tone="secondary">{`${task.title} · ${formatTL(task.price)}`}</Text>
+        <Text variant="body.l" tone="secondary">{`${task.title} · ${task.price === 0 ? t('task.free') : formatTL(task.price)}${task.scheduled_for ? ` · ${t('task.startsAt', { time: new Date(task.scheduled_for).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) })}` : ''}`}</Text>
         {tasker && !sent ? (
           <Rise delay={300} style={[styles.panel, { backgroundColor: theme.color.surface.grouped }]}>
             <Text variant="title">{t('customer.rate', { name: tasker.first_name })}</Text>
@@ -340,6 +344,13 @@ function Done({ task, tasker }: { task: Task; tasker: TaskTasker | null }) {
             {t('customer.rated')}
           </Text>
         ) : null}
+        {tasker ? (
+          <CTA
+            label={t('task.rehire', { name: tasker.first_name })}
+            icon="retry"
+            onPress={() => router.replace({ pathname: '/task/new', params: { category: task.category, rehire: tasker.tasker_id, rehireName: tasker.first_name } })}
+          />
+        ) : null}
         <Button level="secondary" label={t('customer.again')} onPress={() => router.replace('/task/new')} />
       </ScrollView>
       <Confetti play origin={{ x: 200, y: 260 }} colors={[clay.sun.base, clay.ink.base, clay.brick.base, clay.sky.base, clay.leaf.base]} />
@@ -357,7 +368,7 @@ function Closed({ task }: { task: Task }) {
       <Text variant="body.l" tone="secondary">
         {msg}
       </Text>
-      <Text variant="body" tone="tertiary">{`${task.title} · ${formatTL(task.price)}`}</Text>
+      <Text variant="body" tone="tertiary">{`${task.title} · ${task.price === 0 ? t('task.free') : formatTL(task.price)}${task.scheduled_for ? ` · ${t('task.startsAt', { time: new Date(task.scheduled_for).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) })}` : ''}`}</Text>
       <Button label={t('customer.again')} onPress={() => router.replace('/task/new')} />
     </View>
   );

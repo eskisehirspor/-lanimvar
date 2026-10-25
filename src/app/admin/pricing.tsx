@@ -15,7 +15,7 @@ export default function Pricing() {
       {(q.data ?? []).map((r) => (
         <RuleEditor key={r.id} rule={r} />
       ))}
-      <RuleEditor rule={{ id: 'new', category: '', label: '', recommended_price: 500, min_price: 200, max_price: 3000, active: true }} isNew />
+      <RuleEditor rule={{ id: 'new', category: '', label: '', recommended_price: 500, min_price: 200, max_price: 3000, active: true, section: 'daily', sort: 999, max_people: 1 }} isNew />
     </Page>
   );
 }
@@ -23,7 +23,7 @@ export default function Pricing() {
 function RuleEditor({ rule, isNew }: { rule: PricingRule; isNew?: boolean }) {
   const [r, setR] = useState(rule);
   const num = (v: string) => Number(v.replace(/\D/g, '')) || 0;
-  const valid = r.category.trim().length > 1 && r.label.trim().length > 1 && r.min_price > 0 && r.min_price <= r.recommended_price && r.recommended_price <= r.max_price;
+  const valid = r.category.trim().length > 1 && r.label.trim().length > 1 && r.min_price >= 0 && r.min_price <= r.recommended_price && r.recommended_price <= r.max_price;
   return (
     <Card>
       {isNew ? <Text variant="title">{t('admin.newRule')}</Text> : null}
@@ -35,7 +35,7 @@ function RuleEditor({ rule, isNew }: { rule: PricingRule; isNew?: boolean }) {
         <Input numeric value={String(r.max_price)} onChangeText={(v) => setR({ ...r, max_price: num(v) })} placeholder={t('admin.max')} width={90} />
         <Text variant="meta">{t('admin.active')}</Text>
         <Switch value={r.active} onValueChange={(v) => setR({ ...r, active: v })} />
-        <Button size="m" layout="fit" label={t('admin.save')} disabled={!valid} onPress={() => attempt(() => savePricing({ category: r.category.trim(), label: r.label.trim(), recommended_price: r.recommended_price, min_price: r.min_price, max_price: r.max_price, active: r.active }))} />
+        <Button size="m" layout="fit" label={t('admin.save')} disabled={!valid} onPress={() => attempt(() => savePricing({ category: r.category.trim(), label: r.label.trim(), recommended_price: r.recommended_price, min_price: r.min_price, max_price: r.max_price, active: r.active, section: r.section, max_people: r.max_people }))} />
       </View>
     </Card>
   );

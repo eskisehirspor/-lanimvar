@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 
 import { isDemo } from '@/lib/supabase/config';
 
-const DEMO_HERE = { lat: 39.7767, lng: 30.5206, label: 'Hoşnudiye, Eskişehir', street: 'Ahmet Kanatlı Cad. No: 24' };
+const DEMO_HERE = { lat: 39.7767, lng: 30.5206, label: 'Hoşnudiye, Eskişehir', street: 'Ahmet Kanatlı Cad. No: 24', district: 'Tepebaşı', neighbourhood: 'Hoşnudiye' };
 
 export interface Here {
   lat: number;
@@ -11,6 +11,8 @@ export interface Here {
   label: string;
   /** Best-effort street line to prefill the exact address. */
   street: string;
+  district: string;
+  neighbourhood: string;
 }
 
 /** Foreground location only (no background tracking anywhere in the app). */
@@ -28,16 +30,20 @@ export async function whereAmI(): Promise<Here | null> {
   const { latitude: lat, longitude: lng } = pos.coords;
   let label = '';
   let street = '';
+  let district = '';
+  let neighbourhood = '';
   try {
     const [a] = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lng });
     if (a) {
       label = [a.district || a.subregion, a.city].filter(Boolean).join(', ');
       street = [a.street, a.streetNumber].filter(Boolean).join(' No: ');
+      district = a.subregion || a.district || '';
+      neighbourhood = a.district && a.district !== district ? a.district : '';
     }
   } catch {
     // Geocoding is a convenience; the person can type the address.
   }
-  return { lat, lng, label, street };
+  return { lat, lng, label, street, district, neighbourhood };
 }
 
 export async function currentCoords(): Promise<{ lat: number; lng: number } | null> {

@@ -2,6 +2,7 @@ export { AmountEntry } from './AmountEntry';
 export { Avatar } from './Avatar';
 export { Button, type ButtonLevel } from './Button';
 export { Chip, type ChipTone } from './Chip';
+export { CTA } from './CTA';
 export { ClayObject, type ClayObjectName } from './Clay';
 export { EmergencyScreen } from './EmergencyScreen';
 export { Callout, EmptyState, Skeleton, SuccessMoment, TaskRowSkeleton } from './Feedback';

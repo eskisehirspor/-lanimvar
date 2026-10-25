@@ -21,7 +21,7 @@ export function useTaskerProfile() {
     queryKey: taskerKeys.me,
     enabled: !!uid,
     queryFn: async () => {
-      const { data, error } = await db().from('tasker_profiles').select('user_id, verification, is_online, rating_avg, rating_count, completed_count').eq('user_id', uid!).maybeSingle();
+      const { data, error } = await db().from('tasker_profiles').select('user_id, verification, is_online, rating_avg, rating_count, completed_count, categories, application_submitted_at').eq('user_id', uid!).maybeSingle();
       if (error) throw toAppError(error);
       return data as TaskerProfile | null;
     },

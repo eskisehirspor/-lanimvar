@@ -11,12 +11,29 @@ export interface Profile {
   id: string;
   role: AppRole;
   full_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  birth_date: string | null;
   phone: string | null;
+  email: string | null;
+  phone_verified_at: string | null;
+  email_verified_at: string | null;
+  home_district: string | null;
+  home_neighbourhood: string | null;
+  home_address: string | null;
+  home_details: string | null;
+  home_lat: number | null;
+  home_lng: number | null;
   onboarded_at: string | null;
   is_banned: boolean;
   deleted_at: string | null;
   legal_version: string | null;
 }
+
+export const profileColumns =
+  'id, role, full_name, first_name, last_name, birth_date, phone, email, phone_verified_at, email_verified_at, home_district, home_neighbourhood, home_address, home_details, home_lat, home_lng, onboarded_at, is_banned, deleted_at, legal_version';
+
+export type CategorySection = 'daily' | 'social' | 'wait' | 'pets' | 'extra';
 
 export interface TaskerProfile {
   user_id: string;
@@ -25,6 +42,8 @@ export interface TaskerProfile {
   rating_avg: number;
   rating_count: number;
   completed_count: number;
+  categories: string[];
+  application_submitted_at: string | null;
 }
 
 export interface PricingRule {
@@ -35,6 +54,9 @@ export interface PricingRule {
   min_price: number;
   max_price: number;
   active: boolean;
+  section: CategorySection;
+  sort: number;
+  max_people: number;
 }
 
 /** The customer's own task (they may see their own address). */
@@ -54,6 +76,7 @@ export interface Task {
   exact_lat: number | null;
   exact_lng: number | null;
   searching_since: string | null;
+  scheduled_for: string | null;
   first_accepted_at: string | null;
   arrived_at: string | null;
   started_at: string | null;
@@ -93,6 +116,8 @@ export interface Offer {
   expires_at: string;
   customer_first_name: string;
   customer_tasks: number;
+  scheduled_for: string | null;
+  rehire: boolean;
 }
 
 export interface Job {
@@ -162,15 +187,27 @@ export interface AdminPerson {
   id: string;
   full_name: string | null;
   phone: string | null;
+  email: string | null;
+  birth_date: string | null;
   role: AppRole;
   is_banned: boolean;
   deleted_at: string | null;
   created_at: string;
+  phone_verified: boolean;
+  email_verified: boolean;
+  home_district: string | null;
   verification: Verification | null;
   is_online: boolean | null;
   rating_avg: number | null;
   completed_count: number | null;
+  national_id: string | null;
+  id_front_path: string | null;
+  selfie_path: string | null;
+  categories: string[] | null;
+  has_vehicle: boolean | null;
+  application_submitted_at: string | null;
   open_reports: number;
+  late_cancels: number;
 }
 
 export interface AuditRow {

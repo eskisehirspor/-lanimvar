@@ -83,7 +83,7 @@ export const useAdminPricing = () =>
   useQuery({
     queryKey: k.pricing,
     queryFn: async () => {
-      const { data, error } = await db().from('pricing_rules').select('*').order('label');
+      const { data, error } = await db().from('pricing_rules').select('*').order('sort');
       if (error) throw toAppError(error);
       return data as PricingRule[];
     },
@@ -104,6 +104,15 @@ export const setBanned = (user: string, banned: boolean, reason?: string) => rpc
 export const setRole = (user: string, role: AppRole) => rpc('admin_set_role', { p_user: user, p_role: role }).finally(refresh);
 export const updateDispute = (id: string, status: DisputeStatus, resolution?: string) => rpc('admin_update_dispute', { p_id: id, p_status: status, p_resolution: resolution ?? null }).finally(refresh);
 export const settleTask = (id: string, outcome: 'completed' | 'cancelled', note: string) => rpc('admin_settle_task', { p_task: id, p_outcome: outcome, p_note: note }).finally(refresh);
-export const savePricing = (r: Omit<PricingRule, 'id'>) =>
-  rpc('admin_upsert_pricing_rule', { p_category: r.category, p_label: r.label, p_recommended: r.recommended_price, p_min: r.min_price, p_max: r.max_price, p_active: r.active }).finally(refresh);
+export const savePricing = (r: Omit<PricingRule, 'id' | 'sort'>) =>
+  rpc('admin_upsert_pricing_rule', {
+    p_category: r.category,
+    p_label: r.label,
+    p_recommended: r.recommended_price,
+    p_min: r.min_price,
+    p_max: r.max_price,
+    p_active: r.active,
+    p_section: r.section,
+    p_max_people: r.max_people,
+  }).finally(refresh);
 export const readAddress = async (id: string, reason: string) => (await rpc<ExactAddress[]>('admin_task_address', { p_task: id, p_reason: reason }))[0] ?? null;

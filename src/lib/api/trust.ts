@@ -38,3 +38,18 @@ export async function uploadTaskPhoto(task: string, uid: string, uri: string, ki
   await rpc('add_task_media', { p_task: task, p_kind: kind, p_path: path, p_lat: coords?.lat ?? null, p_lng: coords?.lng ?? null });
   queryClient.invalidateQueries({ queryKey: keys.media(task) });
 }
+
+/** ID photo or selfie → private "identity" bucket at <uid>/<kind>-<time>.jpg. Returns the path. */
+export async function uploadIdentityPhoto(uid: string, uri: string, kind: 'id-front' | 'selfie'): Promise<string> {
+  const path = `${uid}/${kind}-${Date.now()}.jpg`;
+  if (isDemo) {
+    await db().storage.from('identity').upload(path, new ArrayBuffer(0), { previewUrl: uri } as never);
+    return path;
+  }
+  const ref = await ImageManipulator.manipulate(uri).resize({ width: 1400 }).renderAsync();
+  const img = await ref.saveAsync({ compress: 0.75, format: SaveFormat.JPEG });
+  const body = await (await fetch(img.uri)).arrayBuffer();
+  const { error } = await db().storage.from('identity').upload(path, body, { contentType: 'image/jpeg', upsert: false });
+  if (error) throw toAppError(error);
+  return path;
+}

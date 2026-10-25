@@ -66,6 +66,42 @@ async function signInWithOAuth(provider: 'google' | 'apple') {
   if (exchangeError) throw toAppError(exchangeError);
 }
 
+/** What auth itself has verified (never trusted from the client for anything server-side). */
+export async function getVerification() {
+  const { data } = await db().auth.getUser();
+  const u = data.user;
+  return {
+    phone: u?.phone ?? null,
+    phoneVerified: !!u?.phone && !!u?.phone_confirmed_at,
+    email: u?.email ?? null,
+    emailVerified: !!u?.email && !!u?.email_confirmed_at,
+  };
+}
+
+/** Add/confirm a phone on an account that signed in with Apple or Google. */
+export async function requestPhoneLink(phone: string) {
+  const { error } = await db().auth.updateUser({ phone: `+${phone}` });
+  if (error) throw toAppError(error);
+}
+
+export async function confirmPhoneLink(phone: string, token: string) {
+  const { error } = await db().auth.verifyOtp({ phone: `+${phone}`, token, type: 'phone_change' });
+  if (error) throw new AppError('invalid_input', error.message);
+}
+
+/** E-mail verification by 6-digit code (the e-mail template carries {{ .Token }}). */
+export async function requestEmailCode(email: string) {
+  const { error } = await db().auth.updateUser({ email: email.trim().toLowerCase() });
+  if (error) throw toAppError(error);
+}
+
+export async function confirmEmailCode(email: string, token: string) {
+  const { error } = await db().auth.verifyOtp({ email: email.trim().toLowerCase(), token, type: 'email_change' });
+  if (error) throw new AppError('invalid_input', error.message);
+}
+
+export const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+
 export async function signOut() {
   await db().auth.signOut();
 }
