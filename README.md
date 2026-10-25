@@ -2,52 +2,66 @@
 
 Local task marketplace, launching in Eskişehir. *İşini bekletme. Hallet.*
 
-**Phase: Foundation + Design Lab.** Visual quality is approved in the Lab
-before any real product screen is built. No auth, backend tables or dispatch yet.
+Customers post a job (“Şimdi lazım”), nearby verified Taskers get it, the first to accept
+wins. The exact address is revealed only to that Tasker, a 6-digit PIN at the door starts the
+job, photos prove it, the customer confirms and pays in cash. Safety (Güvendeyim, Sorun var,
+Görevi bırak, 112) is part of every live screen.
 
-## Open the Design Lab on an iPhone
+## Run it on your phone (Expo Go)
 
-All native modules used here ship in **Expo Go (SDK 58)**.
+```bash
+npm install
+cp .env.example .env          # fill EXPO_PUBLIC_SUPABASE_URL / _ANON_KEY (see below)
+npx expo start --tunnel       # scan the QR with the iPhone camera
+```
 
-1. Install **Expo Go** from the App Store.
-2. `npm install` then `npx expo start` (add `--tunnel` if the phone is on another network).
-3. Scan the QR code with the iPhone camera.
-4. Tap **Tasarım Laboratuvarı**.
+Without Supabase values the app opens a setup screen (and, in development, the Design Lab
+prototype at `/lab/prototype`).
 
-Browser: `npx expo start --web`, then open `/lab`. On a Mac, press `i` for the iOS Simulator.
+### Backend
 
-The Lab exists only in development builds, or in a preview build with `EXPO_PUBLIC_DESIGN_LAB=1`.
+Local (Docker): `npx supabase start && npx supabase db reset`, then copy the URL and anon key
+from `npx supabase status` into `.env`. Demo logins use code `123456`:
+`+90 555 000 00 01` customer · `…02` Tasker · `…03` admin. Details: [`supabase/README.md`](supabase/README.md).
 
-| Section | What to judge |
-|---|---|
-| Ekranlar | 10 full-screen compositions: voice + photo task creation, price dial, night searching and tracking, PIN ticket, swipe-to-accept offer, brand-flood "accepted" and "done" moments — static mocks built only from product primitives |
-| Karşılaştır | 3 palettes × 2 type directions × 2 button shapes, four real screens side by side per combination |
-| Hareket | 11 transitions, each playable alone with its product reason |
-| Bileşenler | Every primitive in every state; sheets and emergency are live |
-| Tipografi · Renk · Marka | Scale, Turkish stress tests, live WCAG checks, wordmark and icon concepts |
+Hosted: create a Supabase project (region Frankfurt), `npx supabase link`, `npx supabase db push`,
+deploy the two Edge Functions, set providers — all steps in `supabase/README.md`.
 
-The floating button (bottom right) opens palette / type / button shape, speed (1×, ½×, ¼×),
-Reduce Motion, text size (100/130/160 %) and haptics.
+### Admin panel
+
+Same codebase, web: `npx expo start --web` and open `/admin` with an admin account, or build a
+static site with `npm run web:admin` (`dist/web`). Legal pages are public at `/legal/<doc>`
+(use `/legal/policy` as the store privacy URL).
+
+## Release
+
+- App Store / Play checklist, privacy labels and review notes: [`docs/APP_STORE.md`](docs/APP_STORE.md)
+- Legal model (intermediary platform) and launch obligations: [`docs/LEGAL.md`](docs/LEGAL.md)
+- Builds: `npx eas-cli@latest build --profile production` (see `eas.json`)
 
 ## Architecture
 
 ```
 src/
-  app/        routes only (Expo Router); lab/ is dev-only (Stack.Protected)
-  brand/      the ONLY place for name, palettes, fonts, wordmark, mark, native assets
+  app/        routes (Expo Router), gated by auth state in app/_layout.tsx:
+              (setup) · (auth) · onboarding · banned · (app) customer+Tasker · admin · legal · lab (dev)
+  brand/      the ONLY place for name, palettes, fonts, wordmark, clay materials, native assets
   theme/      semantic tokens: colour roles, type scale, spacing, radii, motion, a11y
   ui/         product primitives (each has a product job)
-  features/   task/ (lifecycle contract), lab/ (Design Lab tooling and compositions)
+  features/   app shell, customer, tasker, admin, legal texts, task lifecycle, Design Lab
   i18n/       Turkish-first copy, Turkish casing, number formatting
-  lib/        supabase (placeholder), query client, session store, haptics
+  lib/        supabase client, typed RPC API, auth, location, push, haptics
+supabase/     migrations (schema, RLS, RPCs), Edge Functions, seed, SQL security checks
 ```
 
 Guardrails (lint + tests): no raw colours outside brand/theme; no hard-coded brand name;
-no `textTransform`; no React Native `<Text>` outside `ui/Text`; every text role passes WCAG AA
-in all three palettes; copy never promises absolute safety.
-
-Rebrand: edit `src/brand/*`, then `npm run brand:wordmark` and `npm run brand:icons`.
+no `textTransform`; no React Native `<Text>` outside `ui/Text`; every text role passes WCAG AA;
+copy never promises absolute safety; database security checks for PIN, address, races,
+safety exits and deletion.
 
 ```bash
-npm run typecheck && npm run lint && npm test
+npm run typecheck && npm run lint && npm test && npm run db:check
 ```
+
+The Design Lab (dev builds only) keeps the visual system: `/lab` and the interactive
+prototype at `/lab/prototype`.

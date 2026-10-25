@@ -50,6 +50,7 @@
     "eslint-config-expo": "^58.0.4",
     "jest": "^30.5.2",
     "jest-expo": "^58.0.12",
+    "supabase": "^2.122.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -62,7 +63,11 @@
     "test": "jest",
     "brand:wordmark": "python3 scripts/brand/generate-wordmark.py",
     "brand:icons": "python3 scripts/brand/generate-icons.py",
-    "preview:web": "EXPO_PUBLIC_WEB_PREVIEW=1 EXPO_PUBLIC_DESIGN_LAB=1 expo export --platform web --output-dir dist-preview/web && python3 scripts/preview/build-single-file.py"
+    "preview:web": "EXPO_PUBLIC_WEB_PREVIEW=1 EXPO_PUBLIC_DESIGN_LAB=1 expo export --platform web --output-dir dist-preview/web && python3 scripts/preview/build-single-file.py",
+    "db:check": "scripts/db/check.sh",
+    "db:start": "supabase start",
+    "db:reset": "supabase db reset",
+    "web:admin": "expo export --platform web --output-dir dist/web"
   },
   "private": true,
   "jest": {
