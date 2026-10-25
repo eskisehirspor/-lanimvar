@@ -4,4 +4,7 @@ export const supabaseConfig = {
   anonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '',
 };
 
-export const isSupabaseConfigured = Boolean(supabaseConfig.url && supabaseConfig.anonKey);
+/** Public click-through demo: an in-browser fake backend (src/lib/demo). Never set for real builds. */
+export const isDemo = process.env.EXPO_PUBLIC_DEMO === '1';
+
+export const isSupabaseConfigured = isDemo || Boolean(supabaseConfig.url && supabaseConfig.anonKey);

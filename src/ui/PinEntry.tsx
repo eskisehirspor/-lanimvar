@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import Animated, {
   interpolate,
   interpolateColor,
@@ -38,13 +38,17 @@ export interface PinEntryProps {
   status?: PinEntryStatus;
   attemptsLeft?: number;
   showKeypad?: boolean;
+  /** Replaces the default face-to-face reminder under the boxes. */
+  hint?: string;
+  /** Use the system keyboard (SMS codes): enables iOS one-time-code autofill and paste. */
+  systemKeyboard?: boolean;
 }
 
 /**
  * Tasker's PIN entry — each outcome is physically distinct:
  * wrong → shake + attention fill · locked → quiet + disabled · verified → six boxes converge into one check.
  */
-export function PinEntry({ value, onChange, onComplete, status = 'idle', attemptsLeft, showKeypad = true }: PinEntryProps) {
+export function PinEntry({ value, onChange, onComplete, status = 'idle', attemptsLeft, showKeypad = true, hint, systemKeyboard }: PinEntryProps) {
   const theme = useTheme();
   const motion = useMotion();
   const fire = useHaptics();
@@ -104,6 +108,25 @@ export function PinEntry({ value, onChange, onComplete, status = 'idle', attempt
               <AnimatedPath d="M7 15.5l5.5 5.5L23.5 9.5" stroke={c.ink.onInverse} strokeWidth={3.2} strokeLinecap="round" strokeLinejoin="round" fill="none" strokeDasharray={CHECK_LEN} animatedProps={checkProps} />
             </Svg>
           </Animated.View>
+          {systemKeyboard ? (
+            <TextInput
+              value={value}
+              onChangeText={(raw) => {
+                if (status === 'verified' || locked) return;
+                const next = raw.replace(/\D/g, '').slice(0, PIN_LENGTH);
+                onChange(next);
+                if (next.length === PIN_LENGTH) onComplete?.(next);
+              }}
+              autoFocus
+              keyboardType="number-pad"
+              textContentType="oneTimeCode"
+              autoComplete="sms-otp"
+              maxLength={PIN_LENGTH}
+              caretHidden
+              accessibilityLabel={hint ?? t('pin.label')}
+              style={[StyleSheet.absoluteFill, styles.hiddenInput]}
+            />
+          ) : null}
         </Animated.View>
         <View style={styles.message}>
           {status === 'verified' ? (
@@ -134,12 +157,12 @@ export function PinEntry({ value, onChange, onComplete, status = 'idle', attempt
             </View>
           ) : (
             <Text variant="meta" tone="tertiary">
-              {t('pin.faceToFace')}
+              {hint ?? t('pin.faceToFace')}
             </Text>
           )}
         </View>
       </View>
-      {showKeypad ? <Keypad onKey={onKey} onClear={() => onChange('')} disabled={locked || status === 'verified'} /> : null}
+      {showKeypad && !systemKeyboard ? <Keypad onKey={onKey} onClear={() => onChange('')} disabled={locked || status === 'verified'} /> : null}
     </View>
   );
 }
@@ -174,6 +197,7 @@ function Slot({ digit, current, x, center, cell, height, converge, flash, locked
 }
 
 const styles = StyleSheet.create({
+  hiddenInput: { opacity: 0.02, color: 'transparent', fontSize: 1 },
   center: { alignItems: 'center', gap: 14 },
   slot: { position: 'absolute', top: 0, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
   caret: { width: 2, height: 24, borderRadius: 1 },

@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { attempt } from '@/features/app/Notice';
 import { Card, Filter, fmtDate, Input, Page } from '@/features/admin/ui';
 import { t } from '@/i18n';
+import { tr } from '@/i18n/tr';
 import { updateDispute, useDisputes } from '@/lib/api/admin';
 import type { Dispute, DisputeStatus } from '@/lib/api/types';
 import { Button, Chip, Text } from '@/ui';
@@ -43,7 +44,7 @@ function CaseCard({ d }: { d: Dispute }) {
           {fmtDate(d.created_at)}
         </Text>
       </View>
-      <Text variant="title">{d.reason}</Text>
+      <Text variant="title">{d.reason in tr.admin.reasons ? t(`admin.reasons.${d.reason as keyof typeof tr.admin.reasons}`) : d.reason}</Text>
       {d.details ? (
         <Text variant="body" tone="secondary">
           {d.details}

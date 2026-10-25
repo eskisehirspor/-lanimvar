@@ -51,6 +51,21 @@ export function useOffers(enabled: boolean) {
   });
 }
 
+/** Live nudges for one job: the Tasker cannot read task rows, but sees the task's events. */
+export function useJobLive(taskId: string) {
+  useEffect(() => {
+    const channel = db()
+      .channel(`job:${taskId}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'task_events', filter: `task_id=eq.${taskId}` }, () => {
+        queryClient.invalidateQueries({ queryKey: taskerKeys.jobs });
+      })
+      .subscribe();
+    return () => {
+      db().removeChannel(channel);
+    };
+  }, [taskId]);
+}
+
 export function useJobs() {
   return useQuery({ queryKey: taskerKeys.jobs, queryFn: () => rpc<Job[]>('tasker_jobs'), refetchInterval: 15_000 });
 }

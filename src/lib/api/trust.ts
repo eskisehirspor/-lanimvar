@@ -1,6 +1,8 @@
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 
+import { samplePhoto } from '@/lib/demo/backend';
 import { queryClient } from '@/lib/query/queryClient';
+import { isDemo } from '@/lib/supabase/config';
 
 import { db, rpc } from './client';
 import { keys } from './customer';
@@ -20,6 +22,13 @@ export const unblockUser = (subject: string) => rpc<void>('unblock_user', { p_su
  * bucket at <task>/<uid>/<time>.jpg → media row through the RPC.
  */
 export async function uploadTaskPhoto(task: string, uid: string, uri: string, kind: MediaKind, coords?: { lat: number; lng: number }) {
+  if (isDemo) {
+    const path = `${task}/${uid}/${Date.now()}-${kind}.jpg`;
+    await db().storage.from('task-media').upload(path, new ArrayBuffer(0), { previewUrl: uri || samplePhoto('after') } as never);
+    await rpc('add_task_media', { p_task: task, p_kind: kind, p_path: path, p_lat: coords?.lat ?? null, p_lng: coords?.lng ?? null });
+    queryClient.invalidateQueries({ queryKey: keys.media(task) });
+    return;
+  }
   const ref = await ImageManipulator.manipulate(uri).resize({ width: 1600 }).renderAsync();
   const img = await ref.saveAsync({ compress: 0.72, format: SaveFormat.JPEG });
   const body = await (await fetch(img.uri)).arrayBuffer();

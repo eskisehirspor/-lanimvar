@@ -67,7 +67,8 @@
     "db:check": "scripts/db/check.sh",
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
-    "web:admin": "expo export --platform web --output-dir dist/web"
+    "web:admin": "expo export --platform web --output-dir dist/web",
+    "preview:demo": "EXPO_PUBLIC_WEB_PREVIEW=1 EXPO_PUBLIC_DEMO=1 expo export --platform web --output-dir dist-preview/web && PREVIEW_OUT=ilanim-var-demo.html python3 scripts/preview/build-single-file.py && PREVIEW_OUT=ilanim-var-panel.html FRAME=0 python3 scripts/preview/build-single-file.py"
   },
   "private": true,
   "jest": {

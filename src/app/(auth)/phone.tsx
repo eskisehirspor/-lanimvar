@@ -6,8 +6,9 @@ import { attempt } from '@/features/app/Notice';
 import { Screen, TopBar } from '@/features/app/Screen';
 import { t } from '@/i18n';
 import { normalizeTrPhone, sendPhoneCode } from '@/lib/auth/providers';
+import { isDemo } from '@/lib/supabase/config';
 import { useTheme } from '@/theme';
-import { Button, Field, IconButton, Text } from '@/ui';
+import { Button, Chip, Field, IconButton, Text } from '@/ui';
 
 export default function Phone() {
   const theme = useTheme();
@@ -50,6 +51,21 @@ export default function Phone() {
           error={touched && !phone ? t('auth.phoneInvalid') : undefined}
         />
       </View>
+      {isDemo ? (
+        <View style={{ marginTop: theme.space[6], gap: 10 }}>
+          <Text variant="micro" tone="tertiary">
+            {t('demo.accounts')}
+          </Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            <Chip size="m" tone="outline" label={t('demo.customer')} onPress={() => setRaw('555 000 00 01')} />
+            <Chip size="m" tone="outline" label={t('demo.tasker')} onPress={() => setRaw('555 000 00 02')} />
+            <Chip size="m" tone="outline" label={t('demo.admin')} onPress={() => setRaw('555 000 00 03')} />
+          </View>
+          <Text variant="meta" tone="tertiary">
+            {t('demo.anyNumber')}
+          </Text>
+        </View>
+      ) : null}
     </Screen>
   );
 }

@@ -8,6 +8,7 @@ import { Wordmark } from '@/brand/Wordmark';
 import { attempt } from '@/features/app/Notice';
 import { t } from '@/i18n';
 import { signInWithApple, signInWithGoogle } from '@/lib/auth/providers';
+import { isDemo } from '@/lib/supabase/config';
 import { useTheme } from '@/theme';
 import { ClayObject, Grain, Icon, MaskReveal, Rise, Tactile, Text } from '@/ui';
 
@@ -30,6 +31,11 @@ export default function Welcome() {
       <Grain opacity={0.1} />
       <View style={{ paddingTop: insets.top + 22, paddingHorizontal: g }}>
         <Wordmark capHeight={16} color={c.ink.onInverse} />
+        {isDemo ? (
+          <Text variant="meta" style={{ color: c.brand.dot, marginTop: 10 }}>
+            {t('demo.banner')}
+          </Text>
+        ) : null}
       </View>
       <View style={styles.art} pointerEvents="none">
         <Rise delay={500} distance={30}>

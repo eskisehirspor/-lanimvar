@@ -6,6 +6,8 @@ import { attempt, showError } from '@/features/app/Notice';
 import { Screen, TopBar } from '@/features/app/Screen';
 import { t } from '@/i18n';
 import { sendPhoneCode, verifyPhoneCode } from '@/lib/auth/providers';
+import { DEMO_CODE } from '@/lib/demo/backend';
+import { isDemo } from '@/lib/supabase/config';
 import { useTheme } from '@/theme';
 import { IconButton, PinEntry, Text, type PinEntryStatus } from '@/ui';
 
@@ -44,6 +46,11 @@ export default function Verify() {
       <Text variant="body.l" tone="secondary" style={{ marginTop: 8 }}>
         {t('auth.codeSub', { phone })}
       </Text>
+      {isDemo ? (
+        <Text variant="label" tone="link" style={{ marginTop: 8 }}>
+          {t('demo.code', { code: DEMO_CODE })}
+        </Text>
+      ) : null}
       <View style={{ marginTop: theme.space[8] }}>
         <PinEntry
           value={code}
@@ -53,6 +60,8 @@ export default function Verify() {
           }}
           onComplete={submit}
           status={status}
+          systemKeyboard
+          hint=""
         />
       </View>
       {status === 'error' ? (

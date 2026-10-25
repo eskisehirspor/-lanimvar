@@ -64,11 +64,16 @@ export function TaskerHome() {
       <Text variant="meta" tone="secondary">
         {t('customer.greeting', { name: name.split(' ')[0] ?? '' })}
       </Text>
-      <MaskReveal delay={80}>
-        <Text variant="display.hero" style={{ fontSize: 64, lineHeight: 64 }}>
-          {online ? t('tasker.online') : t('tasker.offline')}
-        </Text>
-      </MaskReveal>
+      <View>
+        <MaskReveal key={`a${online}`} delay={60}>
+          <Text variant="display.hero">{online ? t('tasker.heroOnA') : t('tasker.heroOffA')}</Text>
+        </MaskReveal>
+        <MaskReveal key={`b${online}`} delay={160}>
+          <Text variant="display.hero" serif>
+            {online ? t('tasker.heroOnB') : t('tasker.heroOffB')}
+          </Text>
+        </MaskReveal>
+      </View>
 
       {verification && verification !== 'approved' ? (
         <Callout tone="attention" title={verification === 'pending' ? t('tasker.pendingTitle') : t('tasker.rejectedTitle')} body={verification === 'pending' ? t('tasker.pendingBody') : t('tasker.rejectedBody')} />
@@ -142,7 +147,7 @@ function OfferCard({ offer }: { offer: Offer }) {
         <Text variant="micro" tone="onInverseSecondary">
           {t('tasker.offerKicker')}
         </Text>
-        <Text variant="label" tone="onInverse">{`0:${String(left).padStart(2, '0')}`}</Text>
+        <Text variant="label" tone="onInverse">{`${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`}</Text>
       </View>
       <View style={[styles.bar, { backgroundColor: c.surface.hairlineOnInverse }]}>
         <View style={[styles.barFill, { width: `${Math.min(100, (left / 90) * 100)}%`, backgroundColor: c.brand.dot }]} />

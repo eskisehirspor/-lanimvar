@@ -12,11 +12,13 @@ import { stepForStatus } from '@/features/task/model/status';
 import { formatTL, t } from '@/i18n';
 import { useTaskMedia } from '@/lib/api/customer';
 import { toAppError } from '@/lib/api/errors';
-import { markArrived, releaseTask, reportNoShow, startRoute, submitProof, useJobAddress, useJobs, verifyPin } from '@/lib/api/tasker';
+import { markArrived, releaseTask, reportNoShow, startRoute, submitProof, useJobAddress, useJobLive, useJobs, verifyPin } from '@/lib/api/tasker';
 import { uploadTaskPhoto } from '@/lib/api/trust';
 import type { ExactAddress, Job } from '@/lib/api/types';
 import { useAuth } from '@/lib/auth/store';
+import { demoPinFor } from '@/lib/demo/backend';
 import { currentCoords } from '@/lib/location';
+import { isDemo } from '@/lib/supabase/config';
 import { useTheme } from '@/theme';
 import { Button, Callout, IconButton, LifecycleStrip, PinEntry, Skeleton, StatusWord, Text, type PinEntryStatus } from '@/ui';
 
@@ -30,6 +32,7 @@ export default function JobScreen() {
   const c = theme.color;
   const g = theme.layout.gutter;
   const jobs = useJobs();
+  useJobLive(id);
   const job = jobs.data?.find((j) => j.task_id === id);
   const live = !!job && addressStatuses.includes(job.status);
   const address = useJobAddress(id, live);
@@ -210,6 +213,11 @@ function PinStep({ job }: { job: Job }) {
       <Text variant="body" tone="secondary">
         {t('tasker.pinSub')}
       </Text>
+      {isDemo && demoPinFor(job.task_id) ? (
+        <Text variant="label" tone="link">
+          {t('demo.pinHint', { pin: demoPinFor(job.task_id)! })}
+        </Text>
+      ) : null}
       <PinEntry
         value={code}
         onChange={(v) => {
@@ -219,6 +227,7 @@ function PinStep({ job }: { job: Job }) {
         onComplete={submit}
         status={status}
         attemptsLeft={left}
+        systemKeyboard={Platform.OS === 'web'}
       />
       <View style={{ marginTop: theme.space[2] }}>
         <Button
@@ -246,6 +255,12 @@ function ProofStep({ id }: { id: string }) {
   const after = (media.data ?? []).filter((m) => m.kind === 'after' && m.uploader_id === uid);
 
   const takePhoto = async () => {
+    if (isDemo && uid) {
+      setBusy('photo');
+      await attempt(() => uploadTaskPhoto(id, uid, '', 'after'));
+      setBusy(null);
+      return;
+    }
     const perm = await ImagePicker.requestCameraPermissionsAsync();
     if (!perm.granted || !uid) return;
     const shot = await ImagePicker.launchCameraAsync({ quality: 0.8, exif: false });
