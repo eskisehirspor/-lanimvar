@@ -15,7 +15,7 @@ const brandName = { selector: 'Literal[value=/[İI]LANIM VAR|İlanım Var/]', me
 
 module.exports = defineConfig([
   expoConfig,
-  { ignores: ['dist/*', '.expo/*', 'node_modules/*', 'src/brand/generated/*'] },
+  { ignores: ['dist/*', 'dist-preview/*', '.expo/*', 'node_modules/*', 'src/brand/generated/*', 'supabase/functions/*'] },
   {
     files: ['src/**/*.{ts,tsx}'],
     rules: {
