@@ -5,7 +5,7 @@ import { Linking, StyleSheet, View } from 'react-native';
 import { attempt, confirm } from '@/features/app/Notice';
 import { Screen, TAB_CLEARANCE } from '@/features/app/Screen';
 import { legalDocs, type LegalDocId } from '@/features/legal/documents';
-import { t } from '@/i18n';
+import { formatPhone, t } from '@/i18n';
 import { useTaskerProfile } from '@/lib/api/tasker';
 import { deleteAccount, signOut } from '@/lib/auth/providers';
 import { useAuth } from '@/lib/auth/store';
@@ -62,7 +62,7 @@ export default function Profile() {
         <Text variant="micro" tone="tertiary" style={styles.groupTitle}>
           {t('profile.account')}
         </Text>
-        <Info icon="phone" label={t('profile.phone')} value={profile?.phone ? `+${profile.phone}` : '—'} />
+        <Info icon="phone" label={t('profile.phone')} value={formatPhone(profile?.phone)} />
         <Info icon="chat" label={t('profile.email')} value={profile?.email ?? '—'} />
         <Row icon="home" label={t('profile.address')} value={[profile?.home_neighbourhood, profile?.home_district].filter(Boolean).join(', ') || '—'} onPress={() => router.push('/address')} />
       </Panel>

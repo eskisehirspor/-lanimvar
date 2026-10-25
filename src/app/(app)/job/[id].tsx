@@ -20,7 +20,7 @@ import { demoPinFor } from '@/lib/demo/backend';
 import { currentCoords } from '@/lib/location';
 import { isDemo } from '@/lib/supabase/config';
 import { useTheme } from '@/theme';
-import { Button, Callout, IconButton, LifecycleStrip, PinEntry, Skeleton, StatusWord, Text, type PinEntryStatus } from '@/ui';
+import { Button, Callout, CTA, IconButton, LifecycleStrip, PinEntry, Skeleton, StatusWord, Text, type PinEntryStatus } from '@/ui';
 
 const addressStatuses = ['assigned', 'en_route', 'arrived', 'in_progress'];
 
@@ -109,7 +109,7 @@ function NextStep({ job }: { job: Job }) {
     case 'assigned':
       return (
         <View style={{ gap: 10 }}>
-          <Button label={t('tasker.startRoute')} loading={busy} onPress={() => run(() => startRoute(job.task_id))} />
+          <CTA label={t('tasker.startRoute')} icon="navigate" loading={busy} onPress={() => run(() => startRoute(job.task_id))} />
           <CannotDo id={job.task_id} />
         </View>
       );
@@ -119,8 +119,10 @@ function NextStep({ job }: { job: Job }) {
           <Text variant="meta" tone="secondary">
             {t('tasker.arrivedHint')}
           </Text>
-          <Button
+          <CTA
             label={t('tasker.arrived')}
+            icon="mapPin"
+            tone="brand"
             loading={busy}
             onPress={() =>
               run(async () => {
@@ -281,8 +283,10 @@ function ProofStep({ id }: { id: string }) {
         {after.map((m) => (m.url ? <Image key={m.id} source={{ uri: m.url }} style={[styles.photo, { backgroundColor: theme.color.surface.field }]} /> : null))}
       </View>
       <Button level="secondary" icon="camera" label={t('tasker.takePhoto')} loading={busy === 'photo'} onPress={takePhoto} />
-      <Button
+      <CTA
         label={t('tasker.submitProof')}
+        icon="check"
+        tone="brand"
         disabled={!after.length}
         loading={busy === 'submit'}
         onPress={async () => {

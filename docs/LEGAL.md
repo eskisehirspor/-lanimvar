@@ -51,4 +51,9 @@ geçerli kalan maddelerdir.
 - ☐ Görevli olarak çalışanların vergi mükellefiyeti konusunda bilgilendirme metni.
 - ☐ Sorumluluk sigortası (platform için mesleki sorumluluk / siber sigorta) — metinler zararı
   kullanıcılara bırakır ama dava açılmasını engellemez; sigorta savunma masraflarını karşılar.
+- ☐ “12 ay platform dışına taşımama” maddesi: görevliler için güçlü, ancak tüketici müşteriler
+  bakımından haksız şart sayılma riski var; yaptırımı yalnızca hesap kapatma olarak bıraktık
+  (cezai şart yok). Avukatla birlikte değerlendirilmeli.
+- ☐ Görevli kimlik fotoğrafı ve selfie: açık rıza alınıyor, otomatik biyometrik eşleştirme yok;
+  ileride yüz eşleştirme eklenirse KVKK m.6 (özel nitelikli veri) kapsamında ayrıca ele alınmalı.
 - ☐ Avukat incelemesi ve `LEGAL_VERSION` güncellemesi.

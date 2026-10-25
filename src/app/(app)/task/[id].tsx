@@ -16,6 +16,7 @@ import { SchemeProvider, useTheme } from '@/theme';
 import {
   Avatar,
   Button,
+  ClayObject,
   Confetti,
   CTA,
   FlipText,
@@ -294,8 +295,10 @@ function Proof({ task, tasker }: { task: Task; tasker: TaskTasker | null }) {
         {tasker ? <Text variant="body" tone="secondary">{`${tasker.first_name} · ${formatTL(task.price)}`}</Text> : null}
       </ScrollView>
       <View style={[styles.footer, { padding: theme.layout.gutter, gap: 10 }]}>
-        <Button
+        <CTA
           label={t('customer.confirm')}
+          icon="check"
+          tone="brand"
           loading={busy}
           onPress={async () => {
             setBusy(true);
@@ -327,8 +330,9 @@ function Done({ task, tasker }: { task: Task; tasker: TaskTasker | null }) {
           <Rise delay={300} style={[styles.panel, { backgroundColor: theme.color.surface.grouped }]}>
             <Text variant="title">{t('customer.rate', { name: tasker.first_name })}</Text>
             <RatingStars value={stars} onChange={setStars} size={40} />
-            <Button
+            <CTA
               label={t('customer.rateSend')}
+              icon="star"
               disabled={!stars}
               onPress={async () => {
                 const ok = await attempt(async () => {
@@ -351,7 +355,7 @@ function Done({ task, tasker }: { task: Task; tasker: TaskTasker | null }) {
             onPress={() => router.replace({ pathname: '/task/new', params: { category: task.category, rehire: tasker.tasker_id, rehireName: tasker.first_name } })}
           />
         ) : null}
-        <Button level="secondary" label={t('customer.again')} onPress={() => router.replace('/task/new')} />
+        <Button level="ghost" align="center" label={t('customer.again')} onPress={() => router.replace('/task/new')} />
       </ScrollView>
       <Confetti play origin={{ x: 200, y: 260 }} colors={[clay.sun.base, clay.ink.base, clay.brick.base, clay.sky.base, clay.leaf.base]} />
     </View>
@@ -364,12 +368,17 @@ function Closed({ task }: { task: Task }) {
   return (
     <View style={[styles.flex, { backgroundColor: theme.color.surface.base, padding: theme.layout.gutter, paddingTop: 70, gap: 16 }]}>
       <Back />
+      <View style={{ alignItems: 'center', marginVertical: 8 }}>
+        <ClayObject name={task.status === 'expired' ? 'hourglass' : 'boxes'} size={150} />
+      </View>
       <Text variant="display.xl">{t(`status.${task.status}`)}</Text>
       <Text variant="body.l" tone="secondary">
         {msg}
       </Text>
       <Text variant="body" tone="tertiary">{`${task.title} · ${task.price === 0 ? t('task.free') : formatTL(task.price)}${task.scheduled_for ? ` · ${t('task.startsAt', { time: new Date(task.scheduled_for).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) })}` : ''}`}</Text>
-      <Button label={t('customer.again')} onPress={() => router.replace('/task/new')} />
+      <View style={{ marginTop: 'auto', paddingBottom: 24 }}>
+        <CTA label={t('customer.again')} onPress={() => router.replace({ pathname: '/task/new', params: { category: task.category } })} />
+      </View>
     </View>
   );
 }

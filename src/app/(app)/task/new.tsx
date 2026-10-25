@@ -282,7 +282,9 @@ export default function NewTask() {
       ) : null}
       {rule && !free ? <PriceDial key={rule.category} value={value} onChange={setPrice} recommended={rule.recommended_price || 100} min={Math.max(rule.min_price, rule.min_price === 0 ? 10 : 0)} max={rule.max_price} /> : null}
       <View style={[styles.summary, { backgroundColor: c.surface.grouped }]}>
-        <ClayObject name={categoryLook(category).object} size={64} />
+        <View style={[styles.summaryArt, { backgroundColor: theme.illustration.stage[categoryLook(category).stage] }]}>
+          <ClayObject name={categoryLook(category).object} size={56} />
+        </View>
         <View style={{ flex: 1, gap: 3 }}>
           <Text variant="label" numberOfLines={1}>
             {title}
@@ -308,5 +310,6 @@ const styles = StyleSheet.create({
   note: { flexDirection: 'row', gap: 10, alignItems: 'center', padding: 12, borderRadius: 14 },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 14, borderRadius: 18 },
   place: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, borderRadius: 20 },
-  summary: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 20 },
+  summary: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10, paddingRight: 14, borderRadius: 20 },
+  summaryArt: { width: 72, height: 72, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
 });

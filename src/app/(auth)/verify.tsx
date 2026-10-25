@@ -1,21 +1,18 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
 
-import { attempt, showError } from '@/features/app/Notice';
-import { Screen, TopBar } from '@/features/app/Screen';
-import { t } from '@/i18n';
+import { FlowStep } from '@/features/app/FlowStep';
+import { attempt } from '@/features/app/Notice';
+import { formatPhone, t } from '@/i18n';
 import { sendPhoneCode, verifyPhoneCode } from '@/lib/auth/providers';
 import { DEMO_CODE } from '@/lib/demo/backend';
 import { isDemo } from '@/lib/supabase/config';
-import { useTheme } from '@/theme';
-import { IconButton, PinEntry, Text, type PinEntryStatus } from '@/ui';
+import { CTA, PinEntry, Text, type PinEntryStatus } from '@/ui';
 
 const RESEND_S = 60;
 
-/** The 6-digit SMS code. On success the auth listener moves the person on. */
+/** The 6-digit SMS code (iOS autofills it). On success the auth listener moves the person on. */
 export default function Verify() {
-  const theme = useTheme();
   const { phone } = useLocalSearchParams<{ phone: string }>();
   const [code, setCode] = useState('');
   const [status, setStatus] = useState<PinEntryStatus>('idle');
@@ -38,54 +35,47 @@ export default function Verify() {
   };
 
   return (
-    <Screen>
-      <TopBar left={<IconButton icon="arrowLeft" label={t('auth.changeNumber')} onPress={() => router.back()} />} />
-      <Text variant="display.xl" style={{ marginTop: 12 }}>
-        {t('auth.codeTitle')}
-      </Text>
-      <Text variant="body.l" tone="secondary" style={{ marginTop: 8 }}>
-        {t('auth.codeSub', { phone })}
-      </Text>
+    <FlowStep
+      step={2}
+      total={2}
+      onBack={() => router.back()}
+      title={t('auth.codeTitle')}
+      sub={t('onboarding.codeSentTo', { to: formatPhone(phone) })}
+      footer={
+        <CTA
+          label={left > 0 ? t('auth.resendIn', { s: left }) : t('auth.resend')}
+          icon="retry"
+          disabled={left > 0}
+          onPress={() =>
+            attempt(async () => {
+              await sendPhoneCode(phone);
+              setLeft(RESEND_S);
+            })
+          }
+        />
+      }
+    >
       {isDemo ? (
-        <Text variant="label" tone="link" style={{ marginTop: 8 }}>
+        <Text variant="label" tone="link">
           {t('demo.code', { code: DEMO_CODE })}
         </Text>
       ) : null}
-      <View style={{ marginTop: theme.space[8] }}>
-        <PinEntry
-          value={code}
-          onChange={(v) => {
-            setCode(v);
-            if (status === 'error') setStatus('idle');
-          }}
-          onComplete={submit}
-          status={status}
-          systemKeyboard
-          hint=""
-        />
-      </View>
+      <PinEntry
+        value={code}
+        onChange={(v) => {
+          setCode(v);
+          if (status === 'error') setStatus('idle');
+        }}
+        onComplete={submit}
+        status={status}
+        systemKeyboard
+        hint=""
+      />
       {status === 'error' ? (
-        <Text variant="meta" tone="attention" align="center" style={{ marginTop: 8 }}>
+        <Text variant="label" tone="attention" align="center">
           {t('auth.codeWrong')}
         </Text>
       ) : null}
-      <Text
-        variant="label"
-        tone={left > 0 ? 'tertiary' : 'link'}
-        align="center"
-        style={{ marginTop: theme.space[6] }}
-        onPress={
-          left > 0
-            ? undefined
-            : () =>
-                attempt(async () => {
-                  await sendPhoneCode(phone);
-                  setLeft(RESEND_S);
-                }).catch(showError)
-        }
-      >
-        {left > 0 ? t('auth.resendIn', { s: left }) : t('auth.resend')}
-      </Text>
-    </Screen>
+    </FlowStep>
   );
 }

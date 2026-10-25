@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from 'react-native';
 
 import { attempt, confirm } from '@/features/app/Notice';
 import { Card, Filter, fmtDate, Input, Page } from '@/features/admin/ui';
-import { t } from '@/i18n';
+import { formatPhone, t } from '@/i18n';
 import { setBanned, setRole, setVerification, usePeople } from '@/lib/api/admin';
 import { db } from '@/lib/api/client';
 import { useAuth } from '@/lib/auth/store';
@@ -57,7 +57,7 @@ function Person({ p }: { p: AdminPerson }) {
         <View style={{ flex: 1, gap: 2 }}>
           <Text variant="title">{p.deleted_at ? '—' : (p.full_name ?? '—')}</Text>
           <Text variant="meta" tone="secondary">
-            {[role, age ? t('admin.age', { age }) : null, p.home_district, p.phone ? `+${p.phone}` : null, p.email].filter(Boolean).join(' · ')}
+            {[role, age ? t('admin.age', { age }) : null, p.home_district, p.phone ? formatPhone(p.phone) : null, p.email].filter(Boolean).join(' · ')}
           </Text>
         </View>
         <Text variant="meta" tone="tertiary">
