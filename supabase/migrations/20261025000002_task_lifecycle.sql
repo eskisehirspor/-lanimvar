@@ -275,13 +275,13 @@ end $$;
 -- Tasker's own jobs (safe card + status). Exact address is NOT here.
 create or replace function public.tasker_jobs()
 returns table (task_id uuid, title text, category text, price integer, status public.task_status, approx_label text,
-               approx_lat double precision, approx_lng double precision, customer_first_name text, accepted_at timestamptz, arrived_at timestamptz)
+               approx_lat double precision, approx_lng double precision, customer_id uuid, customer_first_name text, accepted_at timestamptz, arrived_at timestamptz)
 language plpgsql stable security definer set search_path = public as $$
 begin
   perform public._me();
   return query
   select t.id, t.title, t.category, t.price, t.status, t.approx_label, t.approx_lat, t.approx_lng,
-         split_part(coalesce(p.full_name, ''), ' ', 1), a.accepted_at, t.arrived_at
+         t.customer_id, split_part(coalesce(p.full_name, ''), ' ', 1), a.accepted_at, t.arrived_at
   from public.task_assignments a
   join public.tasks t on t.id = a.task_id
   join public.profiles p on p.id = t.customer_id

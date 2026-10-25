@@ -1,11 +1,12 @@
 import { Redirect } from 'expo-router';
 
 import { designLabEnabled } from '@/features/lab/enabled';
+import { isWebPreview } from '@/lib/preview';
 
 /**
- * Unknown paths go home. In Lab-enabled preview builds (e.g. a hosted web
- * preview whose URL path is not "/"), they open the Design Lab prototype instead.
+ * Unknown paths (or a path the current auth state may not open) go home. The
+ * single-file web preview opens the Design Lab prototype instead.
  */
 export default function NotFound() {
-  return <Redirect href={designLabEnabled ? '/lab/prototype' : '/'} />;
+  return <Redirect href={isWebPreview && designLabEnabled ? '/lab/prototype' : '/'} />;
 }

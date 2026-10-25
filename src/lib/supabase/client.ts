@@ -17,7 +17,9 @@ export function getSupabase(): SupabaseClient | null {
       storage: Platform.OS === 'web' ? undefined : AsyncStorage,
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: false,
+      // Web (admin panel) completes OAuth from the URL; native exchanges the code itself.
+      detectSessionInUrl: Platform.OS === 'web',
+      flowType: 'pkce',
     },
   });
   const auth = client.auth;

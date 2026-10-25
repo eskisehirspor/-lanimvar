@@ -1,4 +1,4 @@
-/** Supabase configuration (placeholder). No tables exist yet; the app runs without these values. */
+/** Supabase configuration. Without these values the app shows a setup screen (and the Design Lab in development). */
 export const supabaseConfig = {
   url: process.env.EXPO_PUBLIC_SUPABASE_URL ?? '',
   anonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '',
