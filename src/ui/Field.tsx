@@ -110,7 +110,7 @@ export function Field({ label, optional, multiline, leadingIcon, error, hint, di
 const styles = StyleSheet.create({
   labelRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 },
   box: { flexDirection: 'row', gap: 12, borderWidth: 1.5 },
-  input: { flex: 1, minHeight: 24, paddingVertical: 0, outlineWidth: 0 },
+  input: { flex: 1, minHeight: 24, paddingVertical: 0, outlineWidth: 0, outlineColor: 'transparent' },
   multiline: { alignSelf: 'stretch', minHeight: 104 },
   message: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   flex: { flex: 1 },

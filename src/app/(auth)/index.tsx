@@ -9,7 +9,7 @@ import { attempt } from '@/features/app/Notice';
 import { t } from '@/i18n';
 import { signInWithApple, signInWithGoogle } from '@/lib/auth/providers';
 import { useTheme } from '@/theme';
-import { Button, ClayObject, Grain, Icon, MaskReveal, Rise, Tactile, Text } from '@/ui';
+import { ClayObject, Grain, Icon, MaskReveal, Rise, Tactile, Text } from '@/ui';
 
 /** Welcome: the promise, then three doors (phone first; Apple and Google one tap). */
 export default function Welcome() {
@@ -69,9 +69,9 @@ export default function Welcome() {
             onPress={() => run('apple')}
           />
         ) : (
-          <Button label={t('auth.apple')} level="secondary" onInverse loading={busy === 'apple'} onPress={() => run('apple')} />
+          <Outline label={t('auth.apple')} busy={busy === 'apple'} onPress={() => run('apple')} />
         )}
-        <Button label={t('auth.google')} level="secondary" onInverse loading={busy === 'google'} onPress={() => run('google')} />
+        <Outline label={t('auth.google')} busy={busy === 'google'} onPress={() => run('google')} />
         <Text variant="meta" tone="onInverseTertiary" align="center" style={{ marginTop: 6 }}>
           {t('auth.legal')}
         </Text>
@@ -88,9 +88,22 @@ export default function Welcome() {
   );
 }
 
+function Outline({ label, busy, onPress }: { label: string; busy: boolean; onPress: () => void }) {
+  const theme = useTheme();
+  const c = theme.color;
+  return (
+    <Tactile haptic="press" disabled={busy} onPress={onPress} accessibilityLabel={label} style={[styles.outline, { borderColor: c.surface.hairlineOnInverse, opacity: busy ? 0.6 : 1 }]}>
+      <Text variant="button" tone="onInverse">
+        {label}
+      </Text>
+    </Tactile>
+  );
+}
+
 const styles = StyleSheet.create({
+  outline: { height: 54, borderRadius: 27, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
   flex: { flex: 1 },
-  art: { position: 'absolute', right: -10, top: 110 },
+  art: { position: 'absolute', right: -16, top: 70 },
   primary: { height: 60, borderRadius: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10 },
   apple: { height: 54, width: '100%' },
   links: { flexDirection: 'row', justifyContent: 'center', gap: 18 },
